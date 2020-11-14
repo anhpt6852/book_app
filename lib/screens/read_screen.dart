@@ -19,42 +19,81 @@ class ReadScreen extends StatelessWidget {
                       Expanded(  
                         flex: 13,                                              
                         child: Column(
-                        children: <Widget>[  
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                          ),                                                               
-                        Text("Chương 1: ..."),              
-                         ],
+                          children: <Widget>[  
+                            Padding(
+                              padding: EdgeInsets.only(left: 10),
+                            ),                                                                            
+                           ],
                         ),
                       ),
                       Expanded(       
                         flex: 1,                                         
                         child: Column(
-                        children: <Widget>[                                                                
-                        IconButton(
-                          icon: Icon(Icons.volume_up), 
-                          color: Colors.amber,
-                          onPressed: null
-                        ),                   
-                         ],
+                          children: <Widget>[                                                                
+                            IconButton(
+                              icon: Icon(Icons.volume_up), 
+                              color: Colors.amber,
+                              onPressed: null
+                            ),                   
+                          ],
                         ),
                       ),
                       Expanded(    
                         flex: 4,                    
                         child: Column(
-                        children: <Widget>[                                                                
-                        IconButton(
-                          icon: Icon(Icons.translate), 
-                          color: Colors.amber,
-                          onPressed: null
-                        ),                   
-                         ],
+                          children: <Widget>[                                                                
+                            IconButton(
+                              icon: Icon(Icons.translate), 
+                              color: Colors.amber,
+                              onPressed: null
+                            ),                   
+                          ],
                         ),
                       ),
                     ],
                   ),
-                  Stack(
+                  presentChapter(size,context),
+                  Row(
                     children: <Widget>[
+                      Expanded(       
+                        flex: 4,                                         
+                        child: Column(
+                          children: <Widget>[                                                                
+                            IconButton(
+                              icon: Icon(Icons.navigate_before), 
+                              color: Colors.amber,
+                              onPressed: null
+                            ),                   
+                          ],
+                        ),
+                      ),
+                      Text("Chương 1: ..."), 
+                      Expanded(    
+                        flex: 4,                    
+                        child: Column(
+                          children: <Widget>[                                                                
+                            IconButton(
+                              icon: Icon(Icons.navigate_next), 
+                              color: Colors.amber,
+                              onPressed: null
+                            ),                   
+                          ],
+                        ),
+                      ),                    
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Container presentChapter(Size size, BuildContext context) {
+    return Container(
+      child: Stack(
+        children: <Widget>[
                       Container(
                         height: 480,
                         // width: double.infinity,
@@ -70,43 +109,11 @@ class ReadScreen extends StatelessWidget {
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(0),
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                         ),
                       ),
                     ],
-                  ),
-                  ResumeChapter(size,context),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  Container ResumeChapter(Size size, BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
-      width: double.infinity,
-      height: 45,
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: 50,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Color(0xFFEAEAEA).withOpacity(.45),
-                borderRadius: BorderRadius.circular(40),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
