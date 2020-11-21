@@ -4,6 +4,15 @@ import 'package:book_app/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
 
 class DetailsScreen extends StatelessWidget {
+  var lists = [
+    {'name':"Cõi mộng","chapterNumber":1,"tag":"Thi cử thôi mà cũng mệt"},
+    {'name':"Tin dữ","chapterNumber":2,"tag":"Hai người cảnh sát đó"},
+    {'name':"Mật thất","chapterNumber":3,"tag":"Một chiếc taxi bình thường"},
+    {'name':"Mật thất","chapterNumber":3,"tag":"Một chiếc taxi bình thường"},
+    {'name':"Mật thất","chapterNumber":3,"tag":"Một chiếc taxi bình thường"},
+    {'name':"Mật thất","chapterNumber":3,"tag":"Một chiếc taxi bình thường"},
+    {'name':"Mật thất","chapterNumber":3,"tag":"Một chiếc taxi bình thường"},
+  ];
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -36,33 +45,45 @@ class DetailsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      ChapterCard(
-                        name: "Cõi mộng",
-                        chapterNumber: 1,
-                        tag: "Thi cử thôi mà cũng mệt",
-                        press: () {},
-                      ),
-                      ChapterCard(
-                        name: "Tin dữ",
-                        chapterNumber: 2,
-                        tag: "Hai người cảnh sát đó ",
-                        press: () {},
-                      ),
-                      ChapterCard(
-                        name: "Mật thất",
-                        chapterNumber: 3,
-                        tag: "Một chiếc taxi bình thường ",
-                        press: () {},
-                      ),
-                      ChapterCard(
-                        name: "Nhân vật thần bí",
-                        chapterNumber: 4,
-                        tag: "Sau một hồi ồn ào vang lên",
-                        press: () {},
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  ),
+                      for (var i in lists) ChapterCard(
+                        name: i['name'], 
+                        chapterNumber: i["chapterNumber"], 
+                        tag: i["tag"],
+                        press: () {}, 
+                        ),
+                         SizedBox(height: 10),
+                      ],
+                    )
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: <Widget>[
+                  //     ChapterCard(
+                  //       name: "Cõi mộng",
+                  //       chapterNumber: 1,
+                  //       tag: "Thi cử thôi mà cũng mệt",
+                  //       press: () {},
+                  //     ),
+                  //     ChapterCard(
+                  //       name: "Tin dữ",
+                  //       chapterNumber: 2,
+                  //       tag: "Hai người cảnh sát đó ",
+                  //       press: () {},
+                  //     ),
+                  //     ChapterCard(
+                  //       name: "Mật thất",
+                  //       chapterNumber: 3,
+                  //       tag: "Một chiếc taxi bình thường ",
+                  //       press: () {},
+                  //     ),
+                  //     ChapterCard(
+                  //       name: "Nhân vật thần bí",
+                  //       chapterNumber: 4,
+                  //       tag: "Sau một hồi ồn ào vang lên",
+                  //       press: () {},
+                  //     ),
+                  //     SizedBox(height: 10),
+                  //   ],
+                  // ),
                 ),
               ],
             ),

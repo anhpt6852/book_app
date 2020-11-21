@@ -2,6 +2,8 @@ import 'package:book_app/consttants.dart';
 import 'package:book_app/widgets/book_rating.dart';
 import 'package:book_app/widgets/two_side_rounded_button.dart';
 import 'package:flutter/material.dart';
+import 'package:requests/requests.dart';
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 
 class ReadingListCard extends StatelessWidget {
   final String image;
@@ -10,16 +12,33 @@ class ReadingListCard extends StatelessWidget {
   final double rating;
   final Function pressDetails;
   final Function pressRead;
+  // PDFDocument document;
+  PDFDocument document;
 
-  const ReadingListCard({
-    Key key,
-    this.image,
-    this.title,
-    this.auth,
-    this.rating,
-    this.pressDetails,
-    this.pressRead,
-  }) : super(key: key);
+  ReadingListCard(
+      {Key key,
+      this.image,
+      this.title,
+      this.auth,
+      this.rating,
+      this.pressDetails,
+      this.pressRead,
+      this.document})
+      : super(key: key);
+  void getData() async {
+    var request =
+        await Requests.get("http://192.168.43.44:5000/api/list-book?filter=");
+    var data = request.json();
+    // for (int i = 0; i < data['data'].length; i++) {
+
+    // var linkUrl = data['data'][0]["chapters"][0]["linkPdf"];
+    // document =
+    //     await PDFDocument.fromURL(data['data'][0]["chapters"][0]["linkPdf"]);
+    // print(document);
+    print(data['data'][0]["chapters"][0]["linkPdf"]);
+    print("------");
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,9 +137,9 @@ class ReadingListCard extends StatelessWidget {
                       Expanded(
                         child: TwoSideRoundedButton(
                           text: "Đọc",
-                          press: pressRead,
+                          press: getData,
                         ),
-                      )
+                      ),
                     ],
                   )
                 ],
