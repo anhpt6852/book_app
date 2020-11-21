@@ -1,6 +1,5 @@
 import 'package:book_app/consttants.dart';
-import 'package:book_app/screens/home_screen.dart';
-import 'package:book_app/widgets/rounded_button.dart';
+import 'package:book_app/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -11,19 +10,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Book App',
+      title: 'book_app',
       theme: ThemeData(
+        primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
-        textTheme: Theme.of(context).textTheme.apply(
-              displayColor: kBlackColor,
-            ),
       ),
       home: WelcomeScreen(),
     );
   }
 }
 
-class WelcomeScreen extends StatelessWidget {
+/* class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,3 +72,4 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 }
+*/
