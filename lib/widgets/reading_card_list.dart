@@ -26,17 +26,17 @@ class ReadingListCard extends StatelessWidget {
       this.document})
       : super(key: key);
   void getData() async {
-    var request =
-        await Requests.get("http://192.168.43.44:5000/api/list-book?filter=");
-    var data = request.json();
-    // for (int i = 0; i < data['data'].length; i++) {
+    // var request =
+    //     await Requests.get("http://192.168.43.187:5000/api/list-book?filter=");
+    // var data = request.json();
+    // // for (int i = 0; i < data['data'].length; i++) {
 
-    // var linkUrl = data['data'][0]["chapters"][0]["linkPdf"];
-    // document =
-    //     await PDFDocument.fromURL(data['data'][0]["chapters"][0]["linkPdf"]);
-    // print(document);
-    print(data['data'][0]["chapters"][0]["linkPdf"]);
-    print("------");
+    // // var linkUrl = data['data'][0]["chapters"][0]["linkPdf"];
+    // // document =
+    // //     await PDFDocument.fromURL(data['data'][0]["chapters"][0]["linkPdf"]);
+    // // print(document);
+    // print(data['data'][0]["chapters"][0]["linkPdf"]);
+    // print("------");
     // }
   }
 
@@ -137,7 +137,7 @@ class ReadingListCard extends StatelessWidget {
                       Expanded(
                         child: TwoSideRoundedButton(
                           text: "Đọc",
-                          press: getData,
+                          press: pressRead,
                         ),
                       ),
                     ],

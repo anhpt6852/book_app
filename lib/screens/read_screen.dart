@@ -1,6 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:requests/requests.dart';
+import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 
-class ReadScreen extends StatelessWidget {
+class ReadScreen extends StatefulWidget {
+  @override
+  _ReadScreen createState() => _ReadScreen();
+}
+
+class _ReadScreen extends State<ReadScreen> {
+  bool _isLoading = true;
+  PDFDocument document;
+  void initState() {
+    super.initState();
+    loadDocument();
+  }
+  loadDocument() async {
+    document = await PDFDocument.fromURL('http://www.pdf995.com/samples/pdf.pdf');
+
+    setState(() => _isLoading = false);
+  }
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -92,6 +110,11 @@ class ReadScreen extends StatelessWidget {
   }
   Container presentChapter(Size size, BuildContext context) {
     return Container(
+      // child: _isLoading
+      //         ? Center(child: CircularProgressIndicator())
+      //         : PDFViewer(
+      //             document: document,)
+                  // zoomSteps: 1,
       child: Stack(
         children: <Widget>[
                       Container(
@@ -103,6 +126,16 @@ class ReadScreen extends StatelessWidget {
                         left: 0,
                         right: 0,
                         child: Container(
+                          child: _isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : PDFViewer(
+                              document: document,
+                              zoomSteps: 1, 
+                              // lazyLoad: false,
+                              scrollDirection: Axis.vertical,
+                               
+                            ),
+
                           padding:
                               EdgeInsets.only(left: 0, top: 0, right: 0),
                           height: 480,

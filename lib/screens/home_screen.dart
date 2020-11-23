@@ -4,10 +4,61 @@ import 'package:book_app/screens/read_screen.dart';
 import 'package:book_app/widgets/book_rating.dart';
 import 'package:book_app/widgets/reading_card_list.dart';
 import 'package:book_app/widgets/two_side_rounded_button.dart';
-
+import 'package:requests/requests.dart';
 import 'package:flutter/material.dart';
+// import 'package:requests/requests.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreen createState() => new _HomeScreen();
+}
+
+class _HomeScreen extends State<HomeScreen> {
+  List dataBook = [
+    // ["son", "1", "2"],
+    // {'name':"Cõi mộng","chapterNumber":1,"tag":"Thi cử thôi mà cũng mệt"},
+    // {'name':"Tin dữ","chapterNumber":2,"tag":"Hai người cảnh sát đó"},
+    // {'name':"Mật thất","chapterNumber":3,"tag":"Một chiếc taxi bình thường"},
+  ];
+  int checked = 0;
+  Future<void> getData() async {
+    try{
+      var request =
+        await Requests.get("http://192.168.2.142:5000/api/list-book?filter=").timeout(
+          Duration(seconds: 10),
+          onTimeout: () {
+            return null;
+          },
+        );
+      var dataRes = request.json();
+      print(dataRes);
+      for (int i = 0; i < dataRes['data'].length; i++) {
+        List items = [];
+        var nameBook = dataRes['data'][i]["name"];
+        var authoorBook = dataRes['data'][i]['author'];
+        var voteBook = dataRes['data'][i]['votes'][0]['vote'];
+        items.add(nameBook);
+        items.add(authoorBook);
+        items.add(voteBook);
+        print(items);
+        dataBook.add(items);
+      }
+      if (checked == 0) {
+        setState(() {});
+        checked = 1;
+      }
+    } on Exception {
+      rethrow;
+    }
+    
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -50,6 +101,34 @@ class HomeScreen extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: <Widget>[
+                        for (var i in dataBook)
+                          ReadingListCard(
+                            image: "assets/images/truyen-2.png",
+                            title: i[0].toString(),
+                            auth: i[1].toString(),
+                            rating: double.parse(i[2]),
+                            pressRead: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ReadScreen();
+                                  },
+                                ),
+                              );
+                            },
+                            pressDetails: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return DetailsScreen();
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        SizedBox(height: 10),
                         ReadingListCard(
                           image: "assets/images/truyen-1.png",
                           title: "Điệp viên kỳ quái",
@@ -57,12 +136,12 @@ class HomeScreen extends StatelessWidget {
                           rating: 4.9,
                           pressRead: () {
                             Navigator.push(
-                              context, 
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ReadScreen();
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ReadScreen();
                                 },
-                              ), 
+                              ),
                             );
                           },
                           pressDetails: () {
@@ -81,6 +160,16 @@ class HomeScreen extends StatelessWidget {
                           title: "Cách một cánh cửa",
                           auth: "Phạm Tuấn Anh",
                           rating: 4.8,
+                          pressRead: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ReadScreen();
+                                },
+                              ),
+                            );
+                          },
                         ),
                         SizedBox(width: 30),
                       ],
@@ -235,9 +324,9 @@ class HomeScreen extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                      image: AssetImage("assets/images/bg7.png"),
-                      fit: BoxFit.fitWidth,
-                    ),
+                  image: AssetImage("assets/images/bg7.png"),
+                  fit: BoxFit.fitWidth,
+                ),
                 color: Color(0xFFEAEAEA).withOpacity(.45),
                 borderRadius: BorderRadius.circular(29),
               ),
@@ -267,7 +356,7 @@ class HomeScreen extends StatelessWidget {
                     child: Row(
                       children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.only(right: 10.0), 
+                          padding: EdgeInsets.only(right: 10.0),
                           child: BookRating(score: 4.9),
                         ),
                         Expanded(
