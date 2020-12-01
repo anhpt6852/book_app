@@ -2,6 +2,7 @@ import 'package:book_app/consttants.dart';
 import 'package:book_app/screens/read_screen.dart';
 import 'package:book_app/widgets/book_rating.dart';
 import 'package:book_app/widgets/rounded_button.dart';
+import 'package:book_app/screens/comment_screen.dart';
 import 'package:flutter/material.dart';
 
 class DetailsScreen extends StatelessWidget {
@@ -101,6 +102,15 @@ class DetailsScreen extends StatelessWidget {
                     // ),
                     ),
               ],
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: IconButton(
+                icon: Icon(Icons.comment), 
+                onPressed:  () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => CommentScreen()));
+                }
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
@@ -205,7 +215,6 @@ class DetailsScreen extends StatelessWidget {
     );
   }
 }
-
 class ChapterCard extends StatelessWidget {
   final String name;
   final String tag;
