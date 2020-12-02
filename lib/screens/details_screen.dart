@@ -167,7 +167,7 @@ class _DetailsScreen extends State<DetailsScreen> {
                       style: Theme.of(context).textTheme.headline5,
                       children: [
                         TextSpan(
-                          text: "Nhận xét...",
+                          text: "Nhận xét và đánh giá...",
                           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber),                         
                         ),
                       ],
