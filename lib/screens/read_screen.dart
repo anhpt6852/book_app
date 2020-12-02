@@ -35,8 +35,20 @@ class _ReadScreen extends State<ReadScreen> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
+                      Expanded(       
+                        flex: 1,                                         
+                        child: Column(
+                          children: <Widget>[                                                                
+                            IconButton(
+                              icon: Icon(Icons.arrow_back_ios), 
+                              color: Colors.amber,
+                              onPressed: null
+                            ),                   
+                          ],
+                        ),
+                      ),
                       Expanded(  
-                        flex: 5,                                              
+                        flex: 8,                                              
                         child: Column(
                           children: <Widget>[
                             DropDownList(),                   
@@ -136,7 +148,7 @@ class _DropDownListState extends State<DropDownList> {
           dropdownValue = newValue;
         });
       },
-      items: <String>['Chương 1:...', 'Chương 2:...', 'Chương 3:...', 'Chương 4:...']
+      items: <String>['Chương 1:...', 'Chương 2:...', 'Chương 3:...', 'C-hương 4:...']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
