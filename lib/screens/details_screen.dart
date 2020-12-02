@@ -3,8 +3,62 @@ import 'package:book_app/screens/read_screen.dart';
 import 'package:book_app/widgets/book_rating.dart';
 import 'package:book_app/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
+import 'package:requests/requests.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
+  @override
+  _DetailsScreen createState() => new _DetailsScreen();
+}
+
+class _DetailsScreen extends State<DetailsScreen> {
+  List dataBook = [];
+  int checked = 0;
+  Future<void> getData() async {
+    try {
+      var request = await Requests.post(
+              "http://192.168.2.142:5000/api/search-book",
+              body: {"name": "Điệp viên kỳ quái"},
+              bodyEncoding: RequestBodyEncoding.FormURLEncoded)
+          .timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          return null;
+        },
+      );
+      var dataRes = request.json();
+      print(dataRes);
+      // for (int i = 0; i < dataRes['data'].length; i++) {
+      var items = new Map();
+      var nameBook = dataRes['data'][0]["name"];
+      var authorBook = dataRes['data'][0]['author'];
+      var voteBook = dataRes['data'][0]['votes'][0]['vote'];
+      var chapters = dataRes['data'][0]['chapters'];
+      print(chapters.length);
+      // for (int j = 0; j < chapters.length; j++) {
+      //   var chapter = new Map();
+      //   chapter["chapter"] =
+      // }
+      items["nameBook"] = nameBook;
+      items["authorBook"] = authorBook;
+      items["voteBook"] = voteBook;
+      print(items);
+      dataBook.add(items);
+      // }
+      if (checked == 0) {
+        setState(() {});
+        checked = 1;
+      }
+    } on Exception {
+      rethrow;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   var lists = [
     {'name': "Cõi mộng", "chapterNumber": 1, "tag": "Thi cử thôi mà cũng mệt"},
     {'name': "Tin dữ", "chapterNumber": 2, "tag": "Hai người cảnh sát đó"},
@@ -57,13 +111,13 @@ class DetailsScreen extends StatelessWidget {
                             tag: i["tag"],
                             press: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (content) {
-                                      return ReadScreen();
-                                    },
-                                  ),
-                                );
+                                context,
+                                MaterialPageRoute(
+                                  builder: (content) {
+                                    return ReadScreen();
+                                  },
+                                ),
+                              );
                             },
                           ),
                         SizedBox(height: 10),
@@ -185,8 +239,9 @@ class DetailsScreen extends StatelessWidget {
                       Positioned(
                         top: 0,
                         right: 0,
-                        child: Image.asset(
-                          "assets/images/truyen-3.png",
+                        child: Image.network(
+                          'https://googleflutter.com/sample_image.jpg',
+                          // "assets/images/truyen-3.png",
                           width: 130,
                           height: 160,
                         ),
@@ -378,8 +433,8 @@ class BookInfo extends StatelessWidget {
               flex: 1,
               child: Container(
                 color: Colors.transparent,
-                child: Image.asset(
-                  "assets/images/truyen-1.png",
+                child: Image.network(
+                  'https://googleflutter.com/sample_image.jpg',
                   height: 180,
                   width: 200,
                 ),
