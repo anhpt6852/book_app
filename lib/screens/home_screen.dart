@@ -23,24 +23,25 @@ class _HomeScreen extends State<HomeScreen> {
   ];
   int checked = 0;
   Future<void> getData() async {
-    try{
+    try {
       var request =
-        await Requests.get("http://192.168.2.142:5000/api/list-book?filter=").timeout(
-          Duration(seconds: 10),
-          onTimeout: () {
-            return null;
-          },
-        );
+          await Requests.get("http://192.168.2.142:5000/api/list-book?filter=")
+              .timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          return null;
+        },
+      );
       var dataRes = request.json();
       print(dataRes);
       for (int i = 0; i < dataRes['data'].length; i++) {
-        List items = [];
+        var items = new Map();
         var nameBook = dataRes['data'][i]["name"];
-        var authoorBook = dataRes['data'][i]['author'];
+        var authorBook = dataRes['data'][i]['author'];
         var voteBook = dataRes['data'][i]['votes'][0]['vote'];
-        items.add(nameBook);
-        items.add(authoorBook);
-        items.add(voteBook);
+        items["nameBook"] = nameBook;
+        items["authorBook"] = authorBook;
+        items["voteBook"] = voteBook;
         print(items);
         dataBook.add(items);
       }
@@ -51,7 +52,6 @@ class _HomeScreen extends State<HomeScreen> {
     } on Exception {
       rethrow;
     }
-    
   }
 
   @override
@@ -123,9 +123,9 @@ class _HomeScreen extends State<HomeScreen> {
                         for (var i in dataBook)
                           ReadingListCard(
                             image: "assets/images/truyen-2.png",
-                            title: i[0].toString(),
-                            auth: i[1].toString(),
-                            rating: double.parse(i[2]),
+                            title: i["nameBook"].toString(),
+                            auth: i["authorBook"].toString(),
+                            rating: double.parse(i["voteBook"]),
                             pressRead: () {
                               Navigator.push(
                                 context,
