@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:requests/requests.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 
+
 class ReadScreen extends StatefulWidget {
   @override
   _ReadScreen createState() => _ReadScreen();
@@ -35,14 +36,12 @@ class _ReadScreen extends State<ReadScreen> {
                   Row(
                     children: <Widget>[
                       Expanded(  
-                        flex: 13,                                              
+                        flex: 5,                                              
                         child: Column(
-                          children: <Widget>[  
-                            Padding(
-                              padding: EdgeInsets.only(left: 10),
-                            ),                                                                            
-                           ],
-                        ),
+                          children: <Widget>[
+                            DropDownList(),                   
+                          ],
+                         ),
                       ),
                       Expanded(       
                         flex: 1,                                         
@@ -56,50 +55,9 @@ class _ReadScreen extends State<ReadScreen> {
                           ],
                         ),
                       ),
-                      Expanded(    
-                        flex: 4,                    
-                        child: Column(
-                          children: <Widget>[                                                                
-                            IconButton(
-                              icon: Icon(Icons.translate), 
-                              color: Colors.amber,
-                              onPressed: null
-                            ),                   
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                   presentChapter(size,context),
-                  Row(
-                    children: <Widget>[
-                      Expanded(       
-                        flex: 4,                                         
-                        child: Column(
-                          children: <Widget>[                                                                
-                            IconButton(
-                              icon: Icon(Icons.navigate_before), 
-                              color: Colors.amber,
-                              onPressed: null
-                            ),                   
-                          ],
-                        ),
-                      ),
-                      Text("Chương 1: ..."), 
-                      Expanded(    
-                        flex: 4,                    
-                        child: Column(
-                          children: <Widget>[                                                                
-                            IconButton(
-                              icon: Icon(Icons.navigate_next), 
-                              color: Colors.amber,
-                              onPressed: null
-                            ),                   
-                          ],
-                        ),
-                      ),                    
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -148,6 +106,43 @@ class _ReadScreen extends State<ReadScreen> {
                       ),
                     ],
       ),
+    );
+  }
+}
+class DropDownList extends StatefulWidget {
+  DropDownList({Key key}) : super(key: key);
+
+  @override
+  _DropDownListState createState() => _DropDownListState();
+}
+
+class _DropDownListState extends State<DropDownList> {
+  String dropdownValue = 'Chương 1:...';
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: dropdownValue,
+      icon: Icon(Icons.arrow_drop_down),
+      iconSize: 24,
+      elevation: 16,
+      style: TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String newValue) {
+        setState(() {
+          dropdownValue = newValue;
+        });
+      },
+      items: <String>['Chương 1:...', 'Chương 2:...', 'Chương 3:...', 'Chương 4:...']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
     );
   }
 }

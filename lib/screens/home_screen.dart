@@ -6,6 +6,7 @@ import 'package:book_app/widgets/reading_card_list.dart';
 import 'package:book_app/widgets/two_side_rounded_button.dart';
 import 'package:requests/requests.dart';
 import 'package:flutter/material.dart';
+import 'package:book_app/widgets/search_bar.dart';
 // import 'package:requests/requests.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _HomeScreen extends State<HomeScreen> {
     // {'name':"Tin dữ","chapterNumber":2,"tag":"Hai người cảnh sát đó"},
     // {'name':"Mật thất","chapterNumber":3,"tag":"Một chiếc taxi bình thường"},
   ];
+  int _selectedIndex = 0;
   int checked = 0;
   Future<void> getData() async {
     try {
@@ -59,10 +61,41 @@ class _HomeScreen extends State<HomeScreen> {
     getData();
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if(index==1){
+        HomeScreen();
+      }
+      if(index==3){
+        SearchBar();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('Home'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            title: Text('Business')
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            title: Text('Search')
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,13 +323,31 @@ class _HomeScreen extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 40),
+                        SizedBox(height: 40),                        
                       ],
                     ),
                   ),
                 ],
               ),
             ),
+            // Scaffold(
+            //   bottomNavigationBar: BottomNavigationBar(
+            //               items: const <BottomNavigationBarItem>[
+            //               BottomNavigationBarItem(
+            //                 icon: Icon(Icons.home),
+            //                 title: Text('a'),
+            //               ),
+            //               BottomNavigationBarItem(
+            //                 icon: Icon(Icons.business),
+            //                 title: Text('b')
+            //               ),
+            //               BottomNavigationBarItem(
+            //                 icon: Icon(Icons.school),
+            //                 title: Text('c')
+            //               ),
+            //             ],
+            //           ),
+            // )
           ],
         ),
       ),
