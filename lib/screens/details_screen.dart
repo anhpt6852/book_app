@@ -16,10 +16,7 @@ class _DetailsScreen extends State<DetailsScreen> {
   int checked = 0;
   Future<void> getData() async {
     try {
-      var request = await Requests.post(
-              "http://192.168.2.142:5000/api/search-book",
-              body: {"name": "Điệp viên kỳ quái"},
-              bodyEncoding: RequestBodyEncoding.FormURLEncoded)
+      var request = await Requests.get("http://192.168.2.142:5000/api/list-book?filter=")
           .timeout(
         Duration(seconds: 10),
         onTimeout: () {
