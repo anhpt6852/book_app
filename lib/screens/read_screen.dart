@@ -79,7 +79,7 @@ class _ReadScreen extends State<ReadScreen> {
       child: Stack(
         children: <Widget>[
                       Container(
-                        height: 480,
+                        height: MediaQuery.of(context).size.height * 0.9,
                         // width: double.infinity,
                       ),
                       Positioned(
@@ -99,7 +99,7 @@ class _ReadScreen extends State<ReadScreen> {
 
                           padding:
                               EdgeInsets.only(left: 0, top: 0, right: 0),
-                          height: 480,
+                          height: MediaQuery.of(context).size.height * 0.9,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(0),
