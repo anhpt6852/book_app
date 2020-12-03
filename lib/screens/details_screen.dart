@@ -485,39 +485,27 @@ class CommentScreenState extends State<CommentScreen> {
       _Comments.add(val);
     });
   }
-// void _addName(String val){
-//   setState(() {
-//     _name.add(val);
-//   });
-// }
+void _addName(String val){
+  setState(() {
+    _name.add(val);
+  });
+}
 
   Widget _buildCommentList() {
     return ListView.builder(
       itemBuilder: (context, index) {
         if(index < _Comments.length) {
-          return _buildCommentItem(_Comments[index]);
+          return _buildCommentItem(_Comments[index], _name[index]);
         }
       }
     );
   }
 
-  Widget _buildCommentItem(String comment) {
-    return ListTile(title: Text(comment));
+  Widget _buildCommentItem(String comment, String name) {
+    return ListTile(title: Text(name), subtitle: Text(comment),);
   }
 
-  // Widget _buildNameList() {
-  //   return ListView.builder(
-  //     itemBuilder: (context, index) {
-  //       if(index < _name.length) {
-  //         return _buildCommentItem(_name[index]);
-  //       }
-  //     }
-  //   );
-  // }
 
-  // Widget _buildNameItem(String name) {
-  //   return ListTile(title: Text(name));
-  // }
   @override 
   Widget build(BuildContext context) {
     return Container(
@@ -541,7 +529,6 @@ class CommentScreenState extends State<CommentScreen> {
           ),
           Expanded(
             child: 
-                // _buildNameList(),
                 _buildCommentList(),            
           ),        
           TextField(
