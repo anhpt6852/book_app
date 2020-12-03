@@ -2,7 +2,7 @@ import 'package:book_app/consttants.dart';
 import 'package:book_app/screens/read_screen.dart';
 import 'package:book_app/widgets/book_rating.dart';
 import 'package:book_app/widgets/rounded_button.dart';
-import 'package:book_app/screens/comment_screen.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:requests/requests.dart';
 
@@ -70,6 +70,9 @@ class _DetailsScreen extends State<DetailsScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Chi tiết'),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,13 +158,32 @@ class _DetailsScreen extends State<DetailsScreen> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              child: IconButton(
-                icon: Icon(Icons.comment), 
-                onPressed:  () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CommentScreen()));
-                }
-              ),
+              padding: EdgeInsets.all(10.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.headline5,
+                      children: [
+                        TextSpan(
+                          text: "Nhận xét và đánh giá...",
+                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber),                         
+                        ),
+                      ],
+                    ),
+                  ),
+                   Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [ 
+                        CommentScreen(),
+                      ],
+                    ),
+                   ),
+                  ],
+                ),
+              ),          
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
@@ -448,5 +470,72 @@ class BookInfo extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+class CommentScreen extends StatefulWidget {
+  @override
+  createState() => new CommentScreenState();
+}
+
+class CommentScreenState extends State<CommentScreen> { 
+  List<String> _Comments = ['Truyen hay qua', 'Ad cap nhat truyen di', 'Khi nao ra chuong moi vay'];
+  
+  void _addComment(String val){
+    setState(() {
+      _Comments.add(val);
+    });
+  }
+
+
+  Widget _buildCommentList() {
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        if(index< _Comments.length) {
+          return _buildCommentItem(_Comments[index]);
+        }
+      }
+    );
+  }
+
+  Widget _buildCommentItem(String comment) {
+    return ListTile(title: Text(comment),);
+  }
+
+  @override 
+  Widget build(BuildContext context) {
+    return Container(
+      height: 400,
+      child: Column(
+        children: <Widget>[
+          RatingBar.builder(
+            initialRating: 0,
+            minRating: 1,
+            direction: Axis.horizontal,
+            allowHalfRating: true,
+            itemCount: 5,
+            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+            itemBuilder: (context, _) => Icon(
+              Icons.star,
+              color: Colors.amber,
+            ),
+            onRatingUpdate: (rating) {
+              print(rating);
+            },
+          ),
+          Expanded(
+            child: _buildCommentList()
+          ),        
+          TextField(
+            onSubmitted: (String submittedStr) {
+              _addComment(submittedStr);
+            },
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(20.0),
+              hintText: 'Nhận xét...',
+            ),
+          ),
+        ],
+      ),
+      );
   }
 }
