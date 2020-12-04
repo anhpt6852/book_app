@@ -4,6 +4,7 @@ import 'package:book_app/Screens/Signup/components/background.dart';
 import 'package:book_app/components/already_have_an_account_acheck.dart';
 import 'package:book_app/components/rounded_button.dart';
 import 'package:book_app/components/rounded_input_field.dart';
+import 'package:book_app/components/rounded_user_field.dart';
 import 'package:book_app/components/rounded_password_field.dart';
 import 'package:book_app/components/rounded_cfpassword_field.dart';
 
@@ -21,7 +22,7 @@ class Body extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: size.height * 0.03),
-            RoundedInputField(
+            RoundedUserField(
               hintText: "User",
               onChanged: (value) {},
             ),

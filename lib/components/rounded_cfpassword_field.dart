@@ -19,7 +19,7 @@ class RoundedCfPasswordField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: "Confirm Password",
           icon: Icon(
-            Icons.lock,
+            Icons.lock_outline,
             color: kPrimaryColor,
           ),
           suffixIcon: Icon(

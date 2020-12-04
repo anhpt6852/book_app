@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:requests/requests.dart';
+import 'package:book_app/screens/details_screen.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 
 
@@ -24,9 +25,6 @@ class _ReadScreen extends State<ReadScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-       appBar: AppBar(
-        title: const Text('Đọc truyện'),
-       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,8 +36,28 @@ class _ReadScreen extends State<ReadScreen> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
+                      Expanded(       
+                        flex: 1,                                         
+                        child: Column(
+                          children: <Widget>[                                                                
+                            IconButton(
+                              icon: Icon(Icons.arrow_back), 
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return DetailsScreen();
+                                    },
+                                  ),
+                                );
+                              },
+                            ),                   
+                          ],
+                        ),
+                      ),
                       Expanded(  
-                        flex: 5,                                              
+                        flex: 8,                                              
                         child: Column(
                           children: <Widget>[
                             DropDownList(),                   
@@ -47,7 +65,7 @@ class _ReadScreen extends State<ReadScreen> {
                          ),
                       ),
                       Expanded(       
-                        flex: 2,                                         
+                        flex: 1,                                         
                         child: Column(
                           children: <Widget>[                                                                
                             IconButton(

@@ -76,21 +76,21 @@ class ReadingListCard extends StatelessWidget {
             width: 150,
             height: 150,
           ),
-          Positioned(
-            top: 35,
-            right: 10,
-            child: Column(
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    Icons.favorite_border,
-                  ),
-                  onPressed: () {},
-                ),
-                BookRating(score: rating),
-              ],
-            ),
-          ),
+          // Positioned(
+          //   top: 35,
+          //   right: 10,
+          //   child: Column(
+          //     children: <Widget>[
+          //       IconButton(
+          //         icon: Icon(
+          //           Icons.favorite_border,
+          //         ),
+          //         onPressed: () {},
+          //       ),
+          //       BookRating(score: rating),
+          //     ],
+          //   ),
+          // ),
           Positioned(
             top: 160,
             child: Container(
