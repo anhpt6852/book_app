@@ -29,6 +29,7 @@ class _SearchBar extends State<SearchBar> {
           hintText: "Search...",
         ),
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
