@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:book_app/Screens/Login/login_screen.dart';
 import 'package:book_app/Screens/Signup/components/background.dart';
-import 'package:book_app/Screens/Signup/components/or_divider.dart';
-import 'package:book_app/Screens/Signup/components/social_icon.dart';
 import 'package:book_app/components/already_have_an_account_acheck.dart';
 import 'package:book_app/components/rounded_button.dart';
 import 'package:book_app/components/rounded_input_field.dart';
 import 'package:book_app/components/rounded_password_field.dart';
-// import 'package:flutter_svg/svg.dart';
+import 'package:book_app/components/rounded_cfpassword_field.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -23,15 +21,18 @@ class Body extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: size.height * 0.03),
-            /*SvgPicture.asset(
-              "assets/icons/signup.svg",
-              height: size.height * 0.35,
-            ),*/
+            RoundedInputField(
+              hintText: "User",
+              onChanged: (value) {},
+            ),
             RoundedInputField(
               hintText: "Your Email",
               onChanged: (value) {},
             ),
             RoundedPasswordField(
+              onChanged: (value) {},
+            ),
+            RoundedCfPasswordField(
               onChanged: (value) {},
             ),
             RoundedButton(
@@ -52,24 +53,6 @@ class Body extends StatelessWidget {
                 );
               },
             ),
-            OrDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SocalIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                SocalIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
-                  press: () {},
-                ),
-              ],
-            )
           ],
         ),
       ),

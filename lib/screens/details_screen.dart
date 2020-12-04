@@ -479,27 +479,32 @@ class CommentScreen extends StatefulWidget {
 
 class CommentScreenState extends State<CommentScreen> { 
   List<String> _Comments = ['Truyen hay qua', 'Ad cap nhat truyen di', 'Khi nao ra chuong moi vay'];
-  
+  List<String> _name =['anh', 'son', 'hieu'];
   void _addComment(String val){
     setState(() {
       _Comments.add(val);
     });
   }
-
+void _addName(String val){
+  setState(() {
+    _name.add(val);
+  });
+}
 
   Widget _buildCommentList() {
     return ListView.builder(
       itemBuilder: (context, index) {
-        if(index< _Comments.length) {
-          return _buildCommentItem(_Comments[index]);
+        if(index < _Comments.length) {
+          return _buildCommentItem(_Comments[index], _name[index]);
         }
       }
     );
   }
 
-  Widget _buildCommentItem(String comment) {
-    return ListTile(title: Text(comment),);
+  Widget _buildCommentItem(String comment, String name) {
+    return ListTile(title: Text(name), subtitle: Text(comment),);
   }
+
 
   @override 
   Widget build(BuildContext context) {
@@ -523,7 +528,8 @@ class CommentScreenState extends State<CommentScreen> {
             },
           ),
           Expanded(
-            child: _buildCommentList()
+            child: 
+                _buildCommentList(),            
           ),        
           TextField(
             onSubmitted: (String submittedStr) {

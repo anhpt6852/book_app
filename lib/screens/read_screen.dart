@@ -24,6 +24,9 @@ class _ReadScreen extends State<ReadScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+       appBar: AppBar(
+        title: const Text('Đọc truyện'),
+       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,20 +38,8 @@ class _ReadScreen extends State<ReadScreen> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Expanded(       
-                        flex: 1,                                         
-                        child: Column(
-                          children: <Widget>[                                                                
-                            IconButton(
-                              icon: Icon(Icons.arrow_back_ios), 
-                              color: Colors.amber,
-                              onPressed: null
-                            ),                   
-                          ],
-                        ),
-                      ),
                       Expanded(  
-                        flex: 8,                                              
+                        flex: 5,                                              
                         child: Column(
                           children: <Widget>[
                             DropDownList(),                   
@@ -56,7 +47,7 @@ class _ReadScreen extends State<ReadScreen> {
                          ),
                       ),
                       Expanded(       
-                        flex: 1,                                         
+                        flex: 2,                                         
                         child: Column(
                           children: <Widget>[                                                                
                             IconButton(
