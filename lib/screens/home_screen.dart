@@ -15,33 +15,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends State<HomeScreen> {
-  List dataBook = [
-    // ["son", "1", "2"],
-    // {'name':"Cõi mộng","chapterNumber":1,"tag":"Thi cử thôi mà cũng mệt"},
-    // {'name':"Tin dữ","chapterNumber":2,"tag":"Hai người cảnh sát đó"},
-    // {'name':"Mật thất","chapterNumber":3,"tag":"Một chiếc taxi bình thường"},
-  ];
+  List dataBook = [];
   int checked = 0;
   Future<void> getData() async {
     try {
-      var request =
-          await Requests.get("http://192.168.2.142:5000/api/list-book?filter=")
-              .timeout(
+      var request = await Requests.get(
+              "http://192.168.43.187:5000/api/list-book?name=&author=")
+          .timeout(
         Duration(seconds: 10),
         onTimeout: () {
           return null;
         },
       );
       var dataRes = request.json();
-      print(dataRes);
+      print(dataRes["data"].length);
       for (int i = 0; i < dataRes['data'].length; i++) {
         var items = new Map();
         var nameBook = dataRes['data'][i]["name"];
         var authorBook = dataRes['data'][i]['author'];
-        var voteBook = dataRes['data'][i]['votes'][0]['vote'];
+        // var voteBook = dataRes['data'][i]['votes'][0]['vote'];
         items["nameBook"] = nameBook;
         items["authorBook"] = authorBook;
-        items["voteBook"] = voteBook;
+        // items["voteBook"] = voteBook;
+        var voteBook = dataRes['data'][i]["votes"];
+        double voteAverage = 0;
+        for (int j = 0; j < voteBook.length; j++) {
+          int votes = dataRes['data'][i]["votes"][j]["vote"];
+          print("-----");
+          print(votes);
+          voteAverage += votes;
+        }
+        if (voteAverage == 0) {
+          items["voteBook"] = 0.0;
+        }else{
+          items["voteBook"] = voteAverage / voteBook.length;
+        }
+        print(voteBook.length);
         print(items);
         dataBook.add(items);
       }
@@ -64,20 +73,20 @@ class _HomeScreen extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         title: const Text('Trang chủ'),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-               Navigator.push(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                  return SearchBar();
+                    return SearchBar();
                   },
                 ),
-                );
+              );
             },
           ),
         ],
@@ -122,10 +131,10 @@ class _HomeScreen extends State<HomeScreen> {
                       children: <Widget>[
                         for (var i in dataBook)
                           ReadingListCard(
-                            image: "assets/images/truyen-2.png",
+                            image: "http://192.168.43.187:5000/api/image/9eff6388faf84d6f38f930b932b69a46-BACKGROUNDANDROID.jpg",
                             title: i["nameBook"].toString(),
                             auth: i["authorBook"].toString(),
-                            rating: double.parse(i["voteBook"]),
+                            rating: i["voteBook"],
                             pressRead: () {
                               Navigator.push(
                                 context,
@@ -149,7 +158,7 @@ class _HomeScreen extends State<HomeScreen> {
                           ),
                         SizedBox(height: 10),
                         ReadingListCard(
-                          image: "assets/images/truyen-1.png",
+                          image: "http://192.168.43.187:5000/api/image/9eff6388faf84d6f38f930b932b69a46-BACKGROUNDANDROID.jpg",
                           title: "Điệp viên kỳ quái",
                           auth: "Ngô Thái Sơn",
                           rating: 4.9,
@@ -175,7 +184,7 @@ class _HomeScreen extends State<HomeScreen> {
                           },
                         ),
                         ReadingListCard(
-                          image: "assets/images/truyen-2.png",
+                          image: "http://192.168.43.187:5000/api/image/9eff6388faf84d6f38f930b932b69a46-BACKGROUNDANDROID.jpg",
                           title: "Cách một cánh cửa",
                           auth: "Phạm Tuấn Anh",
                           rating: 4.8,
@@ -309,7 +318,7 @@ class _HomeScreen extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 40),                        
+                        SizedBox(height: 40),
                       ],
                     ),
                   ),

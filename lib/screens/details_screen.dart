@@ -15,40 +15,40 @@ class _DetailsScreen extends State<DetailsScreen> {
   List dataBook = [];
   int checked = 0;
   Future<void> getData() async {
-    try {
-      var request = await Requests.get("http://192.168.2.142:5000/api/list-book?filter=")
-          .timeout(
-        Duration(seconds: 10),
-        onTimeout: () {
-          return null;
-        },
-      );
-      var dataRes = request.json();
-      print(dataRes);
-      // for (int i = 0; i < dataRes['data'].length; i++) {
-      var items = new Map();
-      var nameBook = dataRes['data'][0]["name"];
-      var authorBook = dataRes['data'][0]['author'];
-      var voteBook = dataRes['data'][0]['votes'][0]['vote'];
-      var chapters = dataRes['data'][0]['chapters'];
-      print(chapters.length);
-      // for (int j = 0; j < chapters.length; j++) {
-      //   var chapter = new Map();
-      //   chapter["chapter"] =
-      // }
-      items["nameBook"] = nameBook;
-      items["authorBook"] = authorBook;
-      items["voteBook"] = voteBook;
-      print(items);
-      dataBook.add(items);
-      // }
-      if (checked == 0) {
-        setState(() {});
-        checked = 1;
-      }
-    } on Exception {
-      rethrow;
-    }
+    // try {
+    //   var request = await Requests.get("http://192.168.43.187:5000/api/list-book?filter=")
+    //       .timeout(
+    //     Duration(seconds: 10),
+    //     onTimeout: () {
+    //       return null;
+    //     },
+    //   );
+    //   var dataRes = request.json();
+    //   print(dataRes);
+    //   // for (int i = 0; i < dataRes['data'].length; i++) {
+    //   var items = new Map();
+    //   var nameBook = dataRes['data'][0]["name"];
+    //   var authorBook = dataRes['data'][0]['author'];
+    //   var voteBook = dataRes['data'][0]['votes'][0]['vote'];
+    //   var chapters = dataRes['data'][0]['chapters'];
+    //   print(chapters.length);
+    //   // for (int j = 0; j < chapters.length; j++) {
+    //   //   var chapter = new Map();
+    //   //   chapter["chapter"] =
+    //   // }
+    //   items["nameBook"] = nameBook;
+    //   items["authorBook"] = authorBook;
+    //   items["voteBook"] = voteBook;
+    //   print(items);
+    //   dataBook.add(items);
+    //   // }
+    //   if (checked == 0) {
+    //     setState(() {});
+    //     checked = 1;
+    //   }
+    // } on Exception {
+    //   rethrow;
+    // }
   }
 
   @override
