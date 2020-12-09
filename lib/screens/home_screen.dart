@@ -10,6 +10,14 @@ import 'package:book_app/widgets/search_bar.dart';
 // import 'package:requests/requests.dart';
 
 class HomeScreen extends StatefulWidget {
+  String tokenUser;
+  int userId;
+  HomeScreen({
+    Key key,
+    this.tokenUser,
+    this.userId,
+  }) : super(key: key);
+  @override
   @override
   _HomeScreen createState() => new _HomeScreen();
 }
@@ -17,7 +25,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreen extends State<HomeScreen> {
   List dataBook = [];
   int checked = 0;
+  // print(widget.tokenUser);
   Future<void> getData() async {
+    print("-----");
+    print(widget.tokenUser);
+    print(widget.userId);
     try {
       var request = await Requests.get(
               "http://192.168.43.187:5000/api/list-book?name=&author=")
@@ -28,30 +40,57 @@ class _HomeScreen extends State<HomeScreen> {
         },
       );
       var dataRes = request.json();
-      print(dataRes["data"].length);
+      // print(dataRes["data"].length);
       for (int i = 0; i < dataRes['data'].length; i++) {
         var items = new Map();
         var nameBook = dataRes['data'][i]["name"];
         var authorBook = dataRes['data'][i]['author'];
-        // var voteBook = dataRes['data'][i]['votes'][0]['vote'];
+        var urlImgBook = dataRes["data"][i]["imageUrl"];
+        var idBook = dataRes["data"][i]["id"];
+        // print(dataRes["data"][i]["chapters"].length);
+        List dataChapter = [];
+        for (int k = 0; k < dataRes["data"][i]["chapters"].length; k++) {
+          var chapters = new Map();
+          var nameChapter = dataRes["data"][i]["chapters"][k]["name"];
+          var linkPdf = dataRes["data"][i]["chapters"][k]["linkPdf"];
+          chapters["nameChapter"] = nameChapter;
+          chapters["linkPdf"] = linkPdf;
+          dataChapter.add(chapters);
+        }
+        List dataComment = [];
+        for (int k = 0; k < dataRes["data"][i]["comments"].length; k++) {
+          var comments = new Map();
+          var content = dataRes["data"][i]["comments"][k]["comment"];
+          var userCmt = dataRes["data"][i]["comments"][k]["user"]["name"];
+          comments["content"] = content;
+          comments["userCmt"] = userCmt;
+          dataComment.add(comments);
+        }
+
+        print(dataComment);
+        items["idBook"] = idBook;
         items["nameBook"] = nameBook;
         items["authorBook"] = authorBook;
+        items["urlImgBook"] = urlImgBook;
+        items["chapters"] = dataChapter;
+        items["comments"] = dataComment;
         // items["voteBook"] = voteBook;
         var voteBook = dataRes['data'][i]["votes"];
         double voteAverage = 0;
         for (int j = 0; j < voteBook.length; j++) {
           int votes = dataRes['data'][i]["votes"][j]["vote"];
-          print("-----");
-          print(votes);
+          // print("-----");
+          // print(votes);
           voteAverage += votes;
         }
         if (voteAverage == 0) {
           items["voteBook"] = 0.0;
-        }else{
-          items["voteBook"] = voteAverage / voteBook.length;
+        } else {
+          double temp = voteAverage / voteBook.length;
+          items["voteBook"] = double.parse(temp.toStringAsExponential(1));
         }
-        print(voteBook.length);
-        print(items);
+        // print(voteBook.length);
+        // print(items);
         dataBook.add(items);
       }
       if (checked == 0) {
@@ -83,7 +122,9 @@ class _HomeScreen extends State<HomeScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return SearchBar();
+                    return SearchBarDemoHome(
+                      // listBook: dataBook,
+                    );
                   },
                 ),
               );
@@ -131,7 +172,7 @@ class _HomeScreen extends State<HomeScreen> {
                       children: <Widget>[
                         for (var i in dataBook)
                           ReadingListCard(
-                            image: "http://192.168.43.187:5000/api/image/9eff6388faf84d6f38f930b932b69a46-BACKGROUNDANDROID.jpg",
+                            image: i["urlImgBook"].toString(),
                             title: i["nameBook"].toString(),
                             auth: i["authorBook"].toString(),
                             rating: i["voteBook"],
@@ -140,7 +181,10 @@ class _HomeScreen extends State<HomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return ReadScreen();
+                                    return ReadScreen(
+                                      linkPdf: i["chapters"][0]["linkPdf"],
+                                      chapters: i["chapters"],
+                                    );
                                   },
                                 ),
                               );
@@ -150,55 +194,66 @@ class _HomeScreen extends State<HomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return DetailsScreen();
+                                    return DetailsScreen(
+                                      chapters: i["chapters"],
+                                      nameBook: i["nameBook"].toString(),
+                                      image: i["urlImgBook"].toString(),
+                                      rating: i["voteBook"],
+                                      tokenUser: widget.tokenUser,
+                                      userID: widget.userId,
+                                      idBook: i["idBook"],
+                                      comments: i["comments"],
+                                    );
                                   },
                                 ),
                               );
                             },
                           ),
                         SizedBox(height: 10),
-                        ReadingListCard(
-                          image: "http://192.168.43.187:5000/api/image/9eff6388faf84d6f38f930b932b69a46-BACKGROUNDANDROID.jpg",
-                          title: "Điệp viên kỳ quái",
-                          auth: "Ngô Thái Sơn",
-                          rating: 4.9,
-                          pressRead: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return ReadScreen();
-                                },
-                              ),
-                            );
-                          },
-                          pressDetails: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return DetailsScreen();
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                        ReadingListCard(
-                          image: "http://192.168.43.187:5000/api/image/9eff6388faf84d6f38f930b932b69a46-BACKGROUNDANDROID.jpg",
-                          title: "Cách một cánh cửa",
-                          auth: "Phạm Tuấn Anh",
-                          rating: 4.8,
-                          pressRead: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return ReadScreen();
-                                },
-                              ),
-                            );
-                          },
-                        ),
+                        // ReadingListCard(
+                        //   image:
+                        //       "http://192.168.43.187:5000/api/image/9eff6388faf84d6f38f930b932b69a46-BACKGROUNDANDROID.jpg",
+                        //   title: "Điệp viên kỳ quái",
+                        //   auth: "Ngô Thái Sơn",
+                        //   rating: 4.9,
+                        //   pressRead: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) {
+                        //           return ReadScreen();
+                        //         },
+                        //       ),
+                        //     );
+                        //   },
+                        //   pressDetails: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) {
+                        //           return DetailsScreen();
+                        //         },
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        // ReadingListCard(
+                        //   image:
+                        //       "http://192.168.43.187:5000/api/image/9eff6388faf84d6f38f930b932b69a46-BACKGROUNDANDROID.jpg",
+                        //   title: "Cách một cánh cửa",
+                        //   auth: "Phạm Tuấn Anh",
+                        //   rating: 4.8,
+                        //   pressRead: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) {
+                        //           return ReadScreen();
+                        //         },
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
                         SizedBox(width: 30),
                       ],
                     ),

@@ -7,11 +7,57 @@ import 'package:book_app/components/rounded_button.dart';
 import 'package:book_app/components/rounded_user_field.dart';
 import 'package:book_app/components/rounded_password_field.dart';
 // import 'package:flutter_svg/svg.dart';
+import 'package:requests/requests.dart';
 
-class Body extends StatelessWidget {
-  const Body({
-    Key key,
-  }) : super(key: key);
+class Body extends StatefulWidget {
+  @override
+  _Body createState() => new _Body();
+}
+
+class _Body extends State<Body> {
+  // const Body({
+  //   Key key,
+  // }) : super(key: key);
+  String username = "";
+  String passWord = "";
+  bool checkUser = false;
+  String tokenLogin = "";
+  int userID;
+  bool checkLogin = true;
+  Future<void> checkRequest() async {
+    try {
+      var request = await Requests.post("http://192.168.43.187:5000/api/login",
+              body: {
+                'username': username,
+                'password': passWord,
+              },
+              bodyEncoding: RequestBodyEncoding.JSON)
+          .timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          return null;
+        },
+      );
+      var dataReponse = request.json();
+      print(dataReponse);
+      if (dataReponse["success"] == true) {
+        setState(() {
+          checkUser = true;
+          tokenLogin = dataReponse["data"];
+          userID = dataReponse["userId"];
+        });
+      } else {
+        setState(() {
+          checkLogin = false;
+          // tokenLogin = dataReponse["data"];
+        });
+      }
+    } on Exception {
+      rethrow;
+    }
+    print(username);
+    print(passWord);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,23 +79,41 @@ class Body extends StatelessWidget {
             SizedBox(height: size.height * 0.03),
             RoundedUserField(
               hintText: "User",
-              onChanged: (value) {},
+              onChanged: (value) {
+                setState(() {
+                  username = value;
+                });
+              },
             ),
             RoundedPasswordField(
-              onChanged: (value) {},
+              onChanged: (value) {
+                setState(() {
+                  passWord = value;
+                });
+              },
             ),
             RoundedButton(
               text: "LOGIN",
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return HomeScreen();
-                    },
-                  ),
-                );
+              press: () async {
+                await checkRequest();
+                if (checkUser) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return HomeScreen(
+                          tokenUser: tokenLogin,
+                          userId: userID,
+                        );
+                      },
+                    ),
+                  );
+                }
               },
+            ),
+            Text(
+              (checkLogin) ? "" : "Sai tài khoản hoặc mật khẩu",
+              style: TextStyle(color: Color.fromRGBO(255, 1, 1, 1)),
             ),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(

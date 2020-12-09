@@ -7,54 +7,37 @@ import 'package:flutter/material.dart';
 import 'package:requests/requests.dart';
 
 class DetailsScreen extends StatefulWidget {
+  List chapters = [];
+  List comments = [];
+  final double rating;
+  final String nameBook;
+  final String image;
+  final String tokenUser;
+  final int userID;
+  final int idBook;
+  DetailsScreen(
+      {Key key,
+      this.chapters,
+      this.comments,
+      this.rating,
+      this.nameBook,
+      this.image,
+      this.tokenUser,
+      this.userID,
+      this.idBook})
+      : super(key: key);
   @override
   _DetailsScreen createState() => new _DetailsScreen();
 }
 
 class _DetailsScreen extends State<DetailsScreen> {
-  List dataBook = [];
-  int checked = 0;
-  Future<void> getData() async {
-    // try {
-    //   var request = await Requests.get("http://192.168.43.187:5000/api/list-book?filter=")
-    //       .timeout(
-    //     Duration(seconds: 10),
-    //     onTimeout: () {
-    //       return null;
-    //     },
-    //   );
-    //   var dataRes = request.json();
-    //   print(dataRes);
-    //   // for (int i = 0; i < dataRes['data'].length; i++) {
-    //   var items = new Map();
-    //   var nameBook = dataRes['data'][0]["name"];
-    //   var authorBook = dataRes['data'][0]['author'];
-    //   var voteBook = dataRes['data'][0]['votes'][0]['vote'];
-    //   var chapters = dataRes['data'][0]['chapters'];
-    //   print(chapters.length);
-    //   // for (int j = 0; j < chapters.length; j++) {
-    //   //   var chapter = new Map();
-    //   //   chapter["chapter"] =
-    //   // }
-    //   items["nameBook"] = nameBook;
-    //   items["authorBook"] = authorBook;
-    //   items["voteBook"] = voteBook;
-    //   print(items);
-    //   dataBook.add(items);
-    //   // }
-    //   if (checked == 0) {
-    //     setState(() {});
-    //     checked = 1;
-    //   }
-    // } on Exception {
-    //   rethrow;
-    // }
-  }
-
   @override
   void initState() {
     super.initState();
-    getData();
+    print("--------");
+    print(widget.chapters);
+    print(widget.userID);
+    print(widget.comments);
   }
 
   var lists = [
@@ -99,23 +82,30 @@ class _DetailsScreen extends State<DetailsScreen> {
                     ),
                     child: BookInfo(
                       size: size,
+                      image: widget.image,
+                      rating: widget.rating,
+                      nameBook: widget.nameBook,
+                      chapters: widget.chapters,
                     )),
                 Padding(
                     padding: EdgeInsets.only(top: size.height * .48 - 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        for (var i in lists)
+                        for (var i in widget.chapters)
                           ChapterCard(
-                            name: i['name'],
-                            chapterNumber: i["chapterNumber"],
-                            tag: i["tag"],
+                            name: i['nameChapter'],
+                            // chapterNumber: i["chapterNumber"],
+                            // tag: i["tag"],
                             press: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (content) {
-                                    return ReadScreen();
+                                    return ReadScreen(
+                                      linkPdf: i["linkPdf"],
+                                      chapters: widget.chapters,
+                                    );
                                   },
                                 ),
                               );
@@ -163,27 +153,35 @@ class _DetailsScreen extends State<DetailsScreen> {
                 child: Column(
                   children: <Widget>[
                     RichText(
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.headline5,
-                      children: [
-                        TextSpan(
-                          text: "Nhận xét và đánh giá...",
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber),                         
-                        ),
-                      ],
+                      text: TextSpan(
+                        style: Theme.of(context).textTheme.headline5,
+                        children: [
+                          TextSpan(
+                            text: "Nhận xét và đánh giá...",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.amber),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                   Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(
-                      children: [ 
-                        CommentScreen(),
-                      ],
+                    Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          CommentScreen(
+                            token: widget.tokenUser,
+                            userId: widget.userID,
+                            idBook: widget.idBook,
+                            cmtUser: widget.comments,
+                            nameBook: widget.nameBook,
+                          ),
+                        ],
+                      ),
                     ),
-                   ),
                   ],
                 ),
-              ),          
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
@@ -250,7 +248,7 @@ class _DetailsScreen extends State<DetailsScreen> {
                               Row(
                                 children: <Widget>[
                                   BookRating(
-                                    score: 4.9,
+                                    score: widget.rating,
                                   ),
                                   SizedBox(width: 10),
                                   Expanded(
@@ -269,7 +267,7 @@ class _DetailsScreen extends State<DetailsScreen> {
                         top: 0,
                         right: 0,
                         child: Image.network(
-                          'https://googleflutter.com/sample_image.jpg',
+                          widget.image,
                           // "assets/images/truyen-3.png",
                           width: 130,
                           height: 160,
@@ -289,6 +287,7 @@ class _DetailsScreen extends State<DetailsScreen> {
     );
   }
 }
+
 class ChapterCard extends StatelessWidget {
   final String name;
   final String tag;
@@ -326,17 +325,17 @@ class ChapterCard extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: "Chương $chapterNumber : $name \n",
+                  text: "$name",
                   style: TextStyle(
                     fontSize: 16,
                     color: kBlackColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextSpan(
-                  text: tag,
-                  style: TextStyle(color: kLightBlackColor),
-                ),
+                // TextSpan(
+                //   text: tag,
+                //   style: TextStyle(color: kLightBlackColor),
+                // ),
               ],
             ),
           ),
@@ -355,13 +354,13 @@ class ChapterCard extends StatelessWidget {
 }
 
 class BookInfo extends StatelessWidget {
-  const BookInfo({
-    Key key,
-    this.size,
-  }) : super(key: key);
-
+  BookInfo({Key key, this.size, this.image, this.rating, this.nameBook, this.chapters})
+      : super(key: key);
+  List chapters = [];
   final Size size;
-
+  final String image;
+  final double rating;
+  final String nameBook;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -374,48 +373,49 @@ class BookInfo extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Container(
+                    height: MediaQuery.of(context).size.height * 0.15,
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Điệp viên",
+                      "$nameBook",
                       style: Theme.of(context)
                           .textTheme
                           .headline4
-                          .copyWith(fontSize: 28),
+                          .copyWith(fontSize: 26),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: this.size.height * .005),
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.only(top: 0),
-                    child: Text(
-                      "kỳ quái",
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ),
+                  // Container(
+                  //   margin: EdgeInsets.only(top: this.size.height * .005),
+                  //   alignment: Alignment.centerLeft,
+                  //   padding: EdgeInsets.only(top: 0),
+                  //   child: Text(
+                  //     "kỳ quái",
+                  //     style: Theme.of(context).textTheme.subtitle1.copyWith(
+                  //           fontSize: 25,
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //   ),
+                  // ),
                   Row(
                     children: <Widget>[
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                            width: this.size.width * .3,
-                            padding:
-                                EdgeInsets.only(top: this.size.height * .02),
-                            child: Text(
-                              "Lâm Ngữ Đường vẫn như mọi người, thong thả từ trường về nhà, không ngờ lại gặp phải chuyện kỳ quái...",
-                              maxLines: 5,
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: kLightBlackColor,
-                              ),
-                            ),
-                          ),
+                          // Container(
+                          //   width: this.size.width * .3,
+                          //   padding:
+                          //       EdgeInsets.only(top: this.size.height * .02),
+                          //   child: Text(
+                          //     "Lâm Ngữ Đường vẫn như mọi người, thong thả từ trường về nhà, không ngờ lại gặp phải chuyện kỳ quái...",
+                          //     maxLines: 5,
+                          //     style: TextStyle(
+                          //       fontSize: 10,
+                          //       color: kLightBlackColor,
+                          //     ),
+                          //   ),
+                          // ),
                           Container(
                             margin:
-                                EdgeInsets.only(top: this.size.height * .015),
+                                EdgeInsets.only(top: this.size.height * .065),
                             padding: EdgeInsets.only(left: 10, right: 10),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -427,7 +427,10 @@ class BookInfo extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (content) {
-                                      return ReadScreen();
+                                      return ReadScreen(
+                                            linkPdf: chapters[0]["linkPdf"],
+                                          chapters: chapters,
+                                          );
                                     },
                                   ),
                                 );
@@ -450,7 +453,9 @@ class BookInfo extends StatelessWidget {
                             ),
                             onPressed: () {},
                           ),
-                          BookRating(score: 4.9),
+                          BookRating(
+                            score: rating,
+                          ),
                         ],
                       )
                     ],
@@ -462,7 +467,7 @@ class BookInfo extends StatelessWidget {
               child: Container(
                 color: Colors.transparent,
                 child: Image.network(
-                  'https://googleflutter.com/sample_image.jpg',
+                  image,
                   height: 180,
                   width: 200,
                 ),
@@ -472,46 +477,172 @@ class BookInfo extends StatelessWidget {
     );
   }
 }
+
 class CommentScreen extends StatefulWidget {
+  final String token;
+  final int userId;
+  final int idBook;
+  final String nameBook;
+  List cmtUser = [];
+  CommentScreen(
+      {Key key,
+      this.token,
+      this.userId,
+      this.idBook,
+      this.cmtUser,
+      this.nameBook})
+      : super(key: key);
   @override
   createState() => new CommentScreenState();
 }
 
-class CommentScreenState extends State<CommentScreen> { 
-  List<String> _Comments = ['Truyen hay qua', 'Ad cap nhat truyen di', 'Khi nao ra chuong moi vay'];
-  List<String> _name =['anh', 'son', 'hieu'];
-  void _addComment(String val){
+class CommentScreenState extends State<CommentScreen> {
+  List listCmt = [];
+  // List<String> _Comments = [
+  //   'Truyen hay qua',
+  // ];
+  // List<String> _name = [
+  //   'anh',
+  // ];
+  // void _addComment(String val) {
+  //   setState(() {
+  //     _Comments.add(val);
+  //   });
+  // }
+
+  // void _addName(String val) {
+  //   setState(() {
+  //     _name.add(val);
+  //   });
+  // }
+
+  // Widget _buildCommentList() {
+  //   return ListView.builder(itemBuilder: (context, index) {
+  //     if (index < _Comments.length) {
+  //       return _buildCommentItem(_Comments[index], _name[index]);
+  //     }
+  //   });
+  // }
+
+  // Widget _buildCommentItem(String comment, String name) {
+  //   return ListTile(
+  //     title: Text(name),
+  //     subtitle: Text(comment),
+  //   );
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() {
     setState(() {
-      _Comments.add(val);
+      listCmt = widget.cmtUser;
     });
   }
-void _addName(String val){
-  setState(() {
-    _name.add(val);
-  });
-}
 
-  Widget _buildCommentList() {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        if(index < _Comments.length) {
-          return _buildCommentItem(_Comments[index], _name[index]);
-        }
+  Future<void> postVote(double rating) async {
+    try {
+      var request = await Requests.post("http://192.168.43.187:5000/api/vote",
+              headers: {"x-access-token": widget.token},
+              body: {
+                "vote": rating,
+                "bookId": widget.idBook,
+                "userId": widget.userId
+              },
+              bodyEncoding: RequestBodyEncoding.JSON)
+          .timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          return null;
+        },
+      );
+      var dataReponse = request.json();
+      print(dataReponse);
+    } on Exception {
+      rethrow;
+    }
+  }
+
+  Future<void> postComment(String comment) async {
+    try {
+      var request = await Requests.post(
+              "http://192.168.43.187:5000/api/create-comment",
+              headers: {"x-access-token": widget.token},
+              body: {
+                "comment": comment,
+                "bookId": widget.idBook,
+                "userId": widget.userId
+              },
+              bodyEncoding: RequestBodyEncoding.JSON)
+          .timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          return null;
+        },
+      );
+      // var dataReponse = request.json();
+      // print(dataReponse);
+      updateComment();
+    } on Exception {
+      rethrow;
+    }
+  }
+
+  Future<void> updateComment() async {
+    // print(widget.token);
+    // print(widget.userId);
+    // print(widget.idBook);
+    try {
+      String linkRequest = "http://192.168.43.187:5000/api/list-book?name=" +
+          widget.nameBook +
+          "&author=";
+      var request = await Requests.get(linkRequest).timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          return null;
+        },
+      );
+      var dataReponse = request.json();
+      print(dataReponse["data"][0]["comments"].length);
+      List dataComment = [];
+      for (int i = 0; i < dataReponse["data"][0]["comments"].length; i++) {
+        var comments = new Map();
+        var content = dataReponse["data"][0]["comments"][i]["comment"];
+        var userCmt = dataReponse["data"][0]["comments"][i]["user"]["name"];
+        comments["content"] = content;
+        comments["userCmt"] = userCmt;
+        dataComment.add(comments);
       }
-    );
+      setState(() {
+        listCmt = dataComment;
+      });
+    } on Exception {
+      rethrow;
+    }
   }
 
-  Widget _buildCommentItem(String comment, String name) {
-    return ListTile(title: Text(name), subtitle: Text(comment),);
-  }
-
-
-  @override 
+  @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
-      height: 400,
+      height: size.height * 2,
       child: Column(
         children: <Widget>[
+          TextField(
+            onSubmitted: (String submittedStr) {
+              // _addComment(submittedStr);
+              // print(submittedStr);
+              postComment(submittedStr);
+            },
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(20.0),
+              hintText: 'Nhận xét...',
+            ),
+          ),
+          SizedBox(height: 10),
           RatingBar.builder(
             initialRating: 0,
             minRating: 1,
@@ -525,23 +656,23 @@ void _addName(String val){
             ),
             onRatingUpdate: (rating) {
               print(rating);
+              postVote(rating);
             },
           ),
           Expanded(
-            child: 
-                _buildCommentList(),            
-          ),        
-          TextField(
-            onSubmitted: (String submittedStr) {
-              _addComment(submittedStr);
-            },
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(20.0),
-              hintText: 'Nhận xét...',
-            ),
-          ),
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              for (var i in listCmt)
+                ListTile(
+                  title: Text(i["userCmt"]),
+                  subtitle: Text(i["content"]),
+                ),
+              SizedBox(height: 10),
+            ],
+          )),
         ],
       ),
-      );
+    );
   }
 }

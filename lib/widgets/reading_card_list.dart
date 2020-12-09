@@ -25,21 +25,6 @@ class ReadingListCard extends StatelessWidget {
       this.pressRead,
       this.document})
       : super(key: key);
-  void getData() async {
-    // var request =
-    //     await Requests.get("http://192.168.43.187:5000/api/list-book?filter=");
-    // var data = request.json();
-    // // for (int i = 0; i < data['data'].length; i++) {
-
-    // // var linkUrl = data['data'][0]["chapters"][0]["linkPdf"];
-    // // document =
-    // //     await PDFDocument.fromURL(data['data'][0]["chapters"][0]["linkPdf"]);
-    // // print(document);
-    // print(data['data'][0]["chapters"][0]["linkPdf"]);
-    // print("------");
-    // }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -76,21 +61,21 @@ class ReadingListCard extends StatelessWidget {
             width: 150,
             height: 150,
           ),
-          // Positioned(
-          //   top: 35,
-          //   right: 10,
-          //   child: Column(
-          //     children: <Widget>[
-          //       IconButton(
-          //         icon: Icon(
-          //           Icons.favorite_border,
-          //         ),
-          //         onPressed: () {},
-          //       ),
-          //       BookRating(score: rating),
-          //     ],
-          //   ),
-          // ),
+          Positioned(
+            top: 75,
+            right: 20,
+            child: Column(
+              children: <Widget>[
+                // IconButton(
+                //   icon: Icon(
+                //     Icons.favorite_border,
+                //   ),
+                //   onPressed: () {},
+                // ),
+                BookRating(score: rating),
+              ],
+            ),
+          ),
           Positioned(
             top: 160,
             child: Container(
