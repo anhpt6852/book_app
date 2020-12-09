@@ -4,6 +4,7 @@ import 'package:book_app/screens/profile.dart';
 import 'package:book_app/screens/read_screen.dart';
 import 'package:book_app/widgets/book_rating.dart';
 import 'package:book_app/widgets/reading_card_list.dart';
+import 'package:book_app/widgets/search_card.dart';
 import 'package:book_app/widgets/two_side_rounded_button.dart';
 import 'package:requests/requests.dart';
 import 'package:flutter/material.dart';
