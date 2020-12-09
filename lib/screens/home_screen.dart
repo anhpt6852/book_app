@@ -1,5 +1,6 @@
 import 'package:book_app/consttants.dart';
 import 'package:book_app/screens/details_screen.dart';
+import 'package:book_app/screens/profile.dart';
 import 'package:book_app/screens/read_screen.dart';
 import 'package:book_app/widgets/book_rating.dart';
 import 'package:book_app/widgets/reading_card_list.dart';
@@ -74,20 +75,39 @@ class _HomeScreen extends State<HomeScreen> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trang chủ'),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return SearchBar();
-                  },
-                ),
-              );
-            },
+          Expanded(flex:8, child: Text('')),
+          Expanded(
+            flex: 1,
+            child: IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return SearchBar();
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: IconButton(
+              icon: const Icon(Icons.person), 
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return UserProfile();
+                    },
+                  ),
+                );
+              },
+              ),
           ),
         ],
       ),
