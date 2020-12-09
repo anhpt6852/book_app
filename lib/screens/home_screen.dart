@@ -116,20 +116,56 @@ class _HomeScreen extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return SearchBarDemoHome(
-                      // listBook: dataBook,
-                    );
-                  },
-                ),
-              );
-            },
+          // IconButton(
+          //   icon: const Icon(Icons.search),
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) {
+          //           return SearchBarDemoHome(
+          //             // listBook: dataBook,
+          //           );
+          //         },
+          //       ),
+          //     );
+          //   },
+          // ),
+          Expanded(flex:8, child: Text('')),
+          Expanded(
+            flex: 1,
+            child: IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return SearchBarDemoHome(
+                        tokenUser: widget.tokenUser,
+                        userID: widget.userId,
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: IconButton(
+              icon: const Icon(Icons.person), 
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return UserProfile();
+                    },
+                  ),
+                );
+              },
+              ),
           ),
         ],
       ),

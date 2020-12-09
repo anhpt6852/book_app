@@ -21,7 +21,7 @@ class UserProfile extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage('assets/user.png'),
+              // backgroundImage: AssetImage('assets/user.png'),
             ),
             Padding(
               padding: EdgeInsets.all(10.0),
