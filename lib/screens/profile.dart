@@ -5,8 +5,12 @@ const email = 'anhphamtuan31081999@gmail.com';
 
 
 class UserProfile extends StatelessWidget {
-  const UserProfile({
+  String emailUser = "";
+  String nameProfile = "";
+  UserProfile({
     Key key,
+    this.emailUser,
+    this.nameProfile
   }) : super(key: key);
 
   @override
@@ -21,12 +25,13 @@ class UserProfile extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 50,
-              // backgroundImage: AssetImage('assets/user.png'),
+              backgroundColor: Colors.brown.shade800,
+              child: Text(nameProfile.substring(0,1),style: TextStyle(fontSize: 60)),
             ),
             Padding(
               padding: EdgeInsets.all(10.0),
             ),
-            Text('Anh Pham Tuan',),
+            Text(nameProfile),
             SizedBox(
               height: 20,
               width: 200,
@@ -35,7 +40,7 @@ class UserProfile extends StatelessWidget {
               ),
             ),
             InfoCard(
-              text: email,
+              text: emailUser,
               icon: Icons.email,
             ),
             InfoCard(

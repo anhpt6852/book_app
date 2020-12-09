@@ -22,6 +22,8 @@ class _Body extends State<Body> {
   String passWord = "";
   bool checkUser = false;
   String tokenLogin = "";
+  String emailUser = "";
+  String nameProfile = "";
   int userID;
   bool checkLogin = true;
   Future<void> checkRequest() async {
@@ -45,6 +47,8 @@ class _Body extends State<Body> {
           checkUser = true;
           tokenLogin = dataReponse["data"];
           userID = dataReponse["userId"];
+          emailUser = dataReponse["userEmail"];
+          nameProfile = dataReponse["userName"];
         });
       } else {
         setState(() {
@@ -104,6 +108,8 @@ class _Body extends State<Body> {
                         return HomeScreen(
                           tokenUser: tokenLogin,
                           userId: userID,
+                          emailUser: emailUser,
+                          nameProfile: nameProfile,
                         );
                       },
                     ),

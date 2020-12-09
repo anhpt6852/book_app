@@ -14,11 +14,11 @@ import 'package:book_app/widgets/search_bar.dart';
 class HomeScreen extends StatefulWidget {
   String tokenUser;
   int userId;
-  HomeScreen({
-    Key key,
-    this.tokenUser,
-    this.userId,
-  }) : super(key: key);
+  String emailUser;
+  String nameProfile;
+  HomeScreen(
+      {Key key, this.tokenUser, this.userId, this.emailUser, this.nameProfile})
+      : super(key: key);
   @override
   @override
   _HomeScreen createState() => new _HomeScreen();
@@ -32,6 +32,8 @@ class _HomeScreen extends State<HomeScreen> {
     print("-----");
     print(widget.tokenUser);
     print(widget.userId);
+    print(widget.emailUser);
+    print(widget.nameProfile);
     try {
       var request = await Requests.get(
               "http://192.168.43.187:5000/api/list-book?name=&author=")
@@ -131,7 +133,14 @@ class _HomeScreen extends State<HomeScreen> {
           //     );
           //   },
           // ),
-          Expanded(flex:8, child: Text('')),
+          Expanded(
+            flex: 8,
+            
+            child: Container(
+              margin: EdgeInsets.only(left: 60, top: 18),
+              child: Text("Hi! " +widget.nameProfile, style: TextStyle(fontSize: 18),),
+            ),
+          ),
           Expanded(
             flex: 1,
             child: IconButton(
@@ -154,18 +163,21 @@ class _HomeScreen extends State<HomeScreen> {
           Expanded(
             flex: 2,
             child: IconButton(
-              icon: const Icon(Icons.person), 
+              icon: const Icon(Icons.person),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return UserProfile();
+                      return UserProfile(
+                        nameProfile: widget.nameProfile,
+                        emailUser: widget.emailUser,
+                      );
                     },
                   ),
                 );
               },
-              ),
+            ),
           ),
         ],
       ),
