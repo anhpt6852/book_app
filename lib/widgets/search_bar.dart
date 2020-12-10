@@ -41,7 +41,16 @@ class _SearchBarDemoHomeState extends State<SearchBarDemoHome> {
         },
       );
       var dataRes = request.json();
-      // print(dataRes["data"].length);
+      if(dataRes["data"].length == 0){
+        String linkAuthor = "http://192.168.43.187:5000/api/list-book?name=&author="+ value;
+        request = await Requests.get(linkAuthor).timeout(
+          Duration(seconds: 10),
+          onTimeout: () {
+            return null;
+          },
+        );
+        dataRes = request.json();
+      }
       for (int i = 0; i < dataRes['data'].length; i++) {
         var items = new Map();
         var nameBook = dataRes['data'][i]["name"];
@@ -154,7 +163,7 @@ class _SearchBarDemoHomeState extends State<SearchBarDemoHome> {
                                       userID: widget.userID,
                                       idBook: i["idBook"],
                                       comments: i["comments"],
-                                      
+
                                     );
                             },
                           ),
