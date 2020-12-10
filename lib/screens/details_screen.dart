@@ -323,32 +323,28 @@ class ChapterCard extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: "$name",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: kBlackColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                // TextSpan(
-                //   text: tag,
-                //   style: TextStyle(color: kLightBlackColor),
-                // ),
-              ],
+          Expanded(
+            flex: 9,
+            child: Text(
+            "$name",
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 16,
+              color: kLightBlackColor,
             ),
           ),
-          Spacer(),
-          IconButton(
+          ),
+          Expanded(
+            flex: 1,
+            child: IconButton(
             icon: Icon(
               Icons.arrow_forward_ios,
               size: 18,
             ),
             onPressed: press,
-          )
+          ),
+          ),
+          
         ],
       ),
     );

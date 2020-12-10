@@ -26,6 +26,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreen extends State<HomeScreen> {
   List dataBook = [];
+  List dataHalfBook = [];
+  List dataHalfBook2 = [];
+  List dataHalfBook1 = [];
   int checked = 0;
   // print(widget.tokenUser);
   Future<void> getData() async {
@@ -108,10 +111,145 @@ class _HomeScreen extends State<HomeScreen> {
     }
   }
 
+  Future<void> getHalfReading() async {
+    try {
+      var request = await Requests.get(
+        "http://192.168.43.187:5000/api/read",
+        headers: {"x-access-token": widget.tokenUser},
+      ).timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          return null;
+        },
+      );
+      var dataReading = request.json();
+      print("+++++++++++++++++++++++");
+      print(dataReading["data"].length);
+      for (int s = 0; s < dataReading["data"].length; s++) {
+        var infoBook = new Map();
+        String linkChapter = dataReading["data"][s]["chapter"]["linkPdf"];
+        String linkImg = dataReading["data"][s]["book"]["imageUrl"];
+        String author = dataReading["data"][s]["book"]["author"];
+        String nameBook = dataReading["data"][s]["book"]["name"];
+        String chapterIndex = dataReading["data"][s]["chapter"]["name"];
+        int idChapter = dataReading["data"][s]["id"];
+        var time = dataReading["data"][s]["lastReading"];
+        infoBook["linkChapter"] = linkChapter;
+        infoBook["linkImg"] = linkImg;
+        infoBook["author"] = author;
+        infoBook["nameBook"] = nameBook;
+        infoBook["chapterIndex"] = chapterIndex;
+        infoBook["idChapter"] = idChapter;
+        infoBook["time"] = time;
+        dataHalfBook2.add(infoBook);
+      }
+
+      print("=============================");
+      var tempt = 0;
+      var maxtemp = 0;
+      for (var t = 0; t < dataHalfBook2.length; t++) {
+        var maxtime =
+            DateTime.parse(dataHalfBook2[t]["time"]).millisecondsSinceEpoch;
+        print(maxtime);
+        if (maxtime >= maxtemp) {
+          maxtemp = maxtime;
+          tempt = t;
+        }
+      }
+      print(maxtemp);
+      print(tempt);
+      var infoBook = new Map();
+      String linkChapter = dataReading["data"][tempt]["chapter"]["linkPdf"];
+      String linkImg = dataReading["data"][tempt]["book"]["imageUrl"];
+      String author = dataReading["data"][tempt]["book"]["author"];
+      String nameBook = dataReading["data"][tempt]["book"]["name"];
+      String chapterIndex = dataReading["data"][tempt]["chapter"]["name"];
+      int idChapter = dataReading["data"][tempt]["id"];
+      var time = dataReading["data"][tempt]["lastReading"];
+      infoBook["linkChapter"] = linkChapter;
+      infoBook["linkImg"] = linkImg;
+      infoBook["author"] = author;
+      infoBook["nameBook"] = nameBook;
+      infoBook["chapterIndex"] = chapterIndex;
+      infoBook["idChapter"] = idChapter;
+      infoBook["time"] = time;
+      dataHalfBook.add(infoBook);
+      print(dataHalfBook);
+// format time ---------------------
+      // print(DateTime.parse(time).hour);
+// format time -------------------------
+// getnamebook ------------------------------------------
+      String linkRequest = "http://192.168.43.187:5000/api/list-book?name=" +
+          nameBook +
+          "&author=";
+      var request1 = await Requests.get(linkRequest).timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          return null;
+        },
+      );
+      var dataRes1 = request1.json();
+      for (int i = 0; i < dataRes1['data'].length; i++) {
+        var items = new Map();
+        var nameBook = dataRes1['data'][i]["name"];
+        var authorBook = dataRes1['data'][i]['author'];
+        var urlImgBook = dataRes1["data"][i]["imageUrl"];
+        var idBook = dataRes1["data"][i]["id"];
+        List dataChapter = [];
+        for (int k = 0; k < dataRes1["data"][i]["chapters"].length; k++) {
+          var chapters = new Map();
+          var nameChapter = dataRes1["data"][i]["chapters"][k]["name"];
+          var linkPdf = dataRes1["data"][i]["chapters"][k]["linkPdf"];
+          var idChapter = dataRes1["data"][i]["chapters"][k]["id"];
+          chapters["nameChapter"] = nameChapter;
+          chapters["linkPdf"] = linkPdf;
+          chapters["idChapter"] = idChapter;
+          dataChapter.add(chapters);
+        }
+        List dataComment = [];
+        for (int k = 0; k < dataRes1["data"][i]["comments"].length; k++) {
+          var comments = new Map();
+          var content = dataRes1["data"][i]["comments"][k]["comment"];
+          var userCmt = dataRes1["data"][i]["comments"][k]["user"]["name"];
+          comments["content"] = content;
+          comments["userCmt"] = userCmt;
+          dataComment.add(comments);
+        }
+
+        print(dataChapter.length);
+        items["idBook"] = idBook;
+        items["nameBook"] = nameBook;
+        items["authorBook"] = authorBook;
+        items["urlImgBook"] = urlImgBook;
+        items["chapters"] = dataChapter;
+        items["comments"] = dataComment;
+        var voteBook = dataRes1['data'][i]["votes"];
+        double voteAverage = 0;
+        for (int j = 0; j < voteBook.length; j++) {
+          int votes = dataRes1['data'][i]["votes"][j]["vote"];
+          voteAverage += votes;
+        }
+        if (voteAverage == 0) {
+          items["voteBook"] = 0.0;
+        } else {
+          double temp = voteAverage / voteBook.length;
+          items["voteBook"] = double.parse(temp.toStringAsExponential(1));
+        }
+        dataHalfBook1.add(items);
+      }
+      print("----------------------------------==================");
+      print(dataHalfBook1[0]["linkChapter"]);
+// getnamebook ------------------------------------------
+    } on Exception {
+      rethrow;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getData();
+    getHalfReading();
   }
 
   @override
@@ -137,10 +275,12 @@ class _HomeScreen extends State<HomeScreen> {
           // ),
           Expanded(
             flex: 8,
-            
             child: Container(
               margin: EdgeInsets.only(left: 60, top: 18),
-              child: Text("Hi! " +widget.nameProfile, style: TextStyle(fontSize: 18),),
+              child: Text(
+                "Hi! " + widget.nameProfile,
+                style: TextStyle(fontSize: 18),
+              ),
             ),
           ),
           Expanded(
@@ -263,50 +403,6 @@ class _HomeScreen extends State<HomeScreen> {
                             },
                           ),
                         SizedBox(height: 10),
-                        // ReadingListCard(
-                        //   image:
-                        //       "http://192.168.43.187:5000/api/image/9eff6388faf84d6f38f930b932b69a46-BACKGROUNDANDROID.jpg",
-                        //   title: "Điệp viên kỳ quái",
-                        //   auth: "Ngô Thái Sơn",
-                        //   rating: 4.9,
-                        //   pressRead: () {
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //         builder: (context) {
-                        //           return ReadScreen();
-                        //         },
-                        //       ),
-                        //     );
-                        //   },
-                        //   pressDetails: () {
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //         builder: (context) {
-                        //           return DetailsScreen();
-                        //         },
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
-                        // ReadingListCard(
-                        //   image:
-                        //       "http://192.168.43.187:5000/api/image/9eff6388faf84d6f38f930b932b69a46-BACKGROUNDANDROID.jpg",
-                        //   title: "Cách một cánh cửa",
-                        //   auth: "Phạm Tuấn Anh",
-                        //   rating: 4.8,
-                        //   pressRead: () {
-                        //     Navigator.push(
-                        //       context,
-                        //       MaterialPageRoute(
-                        //         builder: (context) {
-                        //           return ReadScreen();
-                        //         },
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
                         SizedBox(width: 30),
                       ],
                     ),
@@ -342,87 +438,108 @@ class _HomeScreen extends State<HomeScreen> {
                           ),
                         ),
                         SizedBox(height: 20),
-                        Container(
-                          height: 80,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/bg5.png"),
-                              fit: BoxFit.fitWidth,
-                            ),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(38.5),
-                            boxShadow: [
-                              BoxShadow(
-                                offset: Offset(0, 10),
-                                blurRadius: 33,
-                                color: Color(0xFFD3D3D3).withOpacity(.84),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ReadScreen(
+                                    linkPdf: dataHalfBook[0]["linkChapter"],
+                                    chapters: dataHalfBook1[0]["chapters"],
+                                    tokenUser: widget.tokenUser,
+                                    idChapter: dataHalfBook[0]["idChapter"],
+                                  );
+                                },
                               ),
-                            ],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(38.5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Expanded(
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.only(left: 20, right: 25),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Expanded(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                "Điệp viên kỳ quái",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Text(
-                                                "Ngô Thái Sơn",
-                                                style: TextStyle(
-                                                  color: kLightBlackColor,
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment:
-                                                    Alignment.bottomRight,
-                                                child: Text(
-                                                  "Chapter 5 of 10",
-                                                  style: TextStyle(
-                                                    fontSize: 10,
-                                                    color: kLightBlackColor,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(height: 5),
-                                            ],
-                                          ),
-                                        ),
-                                        Image.asset(
-                                          "assets/images/truyen-1.png",
-                                          width: 55,
-                                          height: 60,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 7,
-                                  width: size.width * .65,
-                                  decoration: BoxDecoration(
-                                    color: kProgressIndicator,
-                                    borderRadius: BorderRadius.circular(7),
-                                  ),
+                            );
+                          },
+                          child: Container(
+                            height: 80,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("assets/images/bg5.png"),
+                                fit: BoxFit.fitWidth,
+                              ),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(38.5),
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: Offset(0, 10),
+                                  blurRadius: 33,
+                                  color: Color(0xFFD3D3D3).withOpacity(.84),
                                 ),
                               ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(38.5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  for (var i in dataHalfBook)
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20, right: 25),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Text(
+                                                    i["nameBook"],
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    i["author"],
+                                                    style: TextStyle(
+                                                      color: kLightBlackColor,
+                                                    ),
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.bottomRight,
+                                                    child: Text(
+                                                      i["chapterIndex"],
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontSize: 10,
+                                                        color: kLightBlackColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 5),
+                                                ],
+                                              ),
+                                            ),
+                                            Image.network(
+                                              i["linkImg"],
+                                              width: 55,
+                                              height: 60,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  // Container(
+                                  //   height: 7,
+                                  //   width: size.width * .65,
+                                  //   decoration: BoxDecoration(
+                                  //     color: kProgressIndicator,
+                                  //     borderRadius: BorderRadius.circular(7),
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
