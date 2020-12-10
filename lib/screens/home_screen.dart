@@ -57,8 +57,10 @@ class _HomeScreen extends State<HomeScreen> {
           var chapters = new Map();
           var nameChapter = dataRes["data"][i]["chapters"][k]["name"];
           var linkPdf = dataRes["data"][i]["chapters"][k]["linkPdf"];
+          var idChapter = dataRes["data"][i]["chapters"][k]["id"];
           chapters["nameChapter"] = nameChapter;
           chapters["linkPdf"] = linkPdf;
+          chapters["idChapter"] = idChapter;
           dataChapter.add(chapters);
         }
         List dataComment = [];
@@ -233,6 +235,8 @@ class _HomeScreen extends State<HomeScreen> {
                                     return ReadScreen(
                                       linkPdf: i["chapters"][0]["linkPdf"],
                                       chapters: i["chapters"],
+                                      tokenUser: widget.tokenUser,
+                                      idChapter: i["chapters"][0]["idChapter"],
                                     );
                                   },
                                 ),
@@ -390,7 +394,7 @@ class _HomeScreen extends State<HomeScreen> {
                                                 alignment:
                                                     Alignment.bottomRight,
                                                 child: Text(
-                                                  "Chapter 7 of 10",
+                                                  "Chapter 5 of 10",
                                                   style: TextStyle(
                                                     fontSize: 10,
                                                     color: kLightBlackColor,

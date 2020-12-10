@@ -24,7 +24,7 @@ class DetailsScreen extends StatefulWidget {
       this.image,
       this.tokenUser,
       this.userID,
-      this.idBook})
+      this.idBook,})
       : super(key: key);
   @override
   _DetailsScreen createState() => new _DetailsScreen();
@@ -105,6 +105,8 @@ class _DetailsScreen extends State<DetailsScreen> {
                                     return ReadScreen(
                                       linkPdf: i["linkPdf"],
                                       chapters: widget.chapters,
+                                      idChapter: i["idChapter"],
+                                      tokenUser: widget.tokenUser,
                                     );
                                   },
                                 ),
@@ -354,7 +356,13 @@ class ChapterCard extends StatelessWidget {
 }
 
 class BookInfo extends StatelessWidget {
-  BookInfo({Key key, this.size, this.image, this.rating, this.nameBook, this.chapters})
+  BookInfo(
+      {Key key,
+      this.size,
+      this.image,
+      this.rating,
+      this.nameBook,
+      this.chapters})
       : super(key: key);
   List chapters = [];
   final Size size;
@@ -428,9 +436,11 @@ class BookInfo extends StatelessWidget {
                                   MaterialPageRoute(
                                     builder: (content) {
                                       return ReadScreen(
-                                            linkPdf: chapters[0]["linkPdf"],
-                                          chapters: chapters,
-                                          );
+                                        linkPdf: chapters[0]["linkPdf"],
+                                        chapters: chapters,
+                                        idChapter: chapters[0]["idChapter"],
+                                        
+                                      );
                                     },
                                   ),
                                 );
@@ -628,30 +638,30 @@ class CommentScreenState extends State<CommentScreen> {
           ),
           Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    for (var i in listCmt)
-                      ListTile(
-                        leading:Container(
-                        child: Text(i["userCmt"].substring(0,1),style: TextStyle(fontSize: 30,color: Colors.white)),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Color.fromRGBO(30, 136, 229, 1),
-                        ),
-                        alignment: Alignment.center,
-                        height: 50,
-                        width: 50,
-                        margin: EdgeInsets.only(left: 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                for (var i in listCmt)
+                  ListTile(
+                    leading: Container(
+                      child: Text(i["userCmt"].substring(0, 1),
+                          style: TextStyle(fontSize: 30, color: Colors.white)),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Color.fromRGBO(30, 136, 229, 1),
                       ),
-                        title: Text(i["userCmt"]),
-                        subtitle: Text(i["content"]),
-                      ),
-                    SizedBox(height: 10),
-                  ],
-                ),
-            )
-          ),
+                      alignment: Alignment.center,
+                      height: 50,
+                      width: 50,
+                      margin: EdgeInsets.only(left: 0),
+                    ),
+                    title: Text(i["userCmt"]),
+                    subtitle: Text(i["content"]),
+                  ),
+                SizedBox(height: 10),
+              ],
+            ),
+          )),
         ],
       ),
     );

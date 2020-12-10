@@ -12,8 +12,12 @@ import 'package:pdf_text/pdf_text.dart';
 
 class ReadScreen extends StatefulWidget {
   final String linkPdf;
+  final String tokenUser;
+  final int idChapter;
   List chapters = [];
-  ReadScreen({Key key, this.linkPdf, this.chapters}) : super(key: key);
+  ReadScreen(
+      {Key key, this.linkPdf, this.chapters, this.tokenUser, this.idChapter})
+      : super(key: key);
   @override
   _ReadScreen createState() => _ReadScreen();
 }
@@ -45,7 +49,7 @@ class _ReadScreen extends State<ReadScreen> {
   Future _pickPDFText(String linkPdf) async {
     _pdfDoc = await PDFDoc.fromURL(linkPdf);
     String text = await _pdfDoc.text;
-    print(text);
+    // print(text);
     setState(() {
       _newVoiceText = text;
       checkTTS = false;
@@ -59,6 +63,7 @@ class _ReadScreen extends State<ReadScreen> {
     loadDocument(widget.linkPdf);
     cutData();
     _pickPDFText(widget.linkPdf);
+    postChapterRead(widget.idChapter);
   }
 
   initTts() {
@@ -156,6 +161,30 @@ class _ReadScreen extends State<ReadScreen> {
   }
 
 //--------------------------- text to speech ---------------------------
+
+  Future<void> postChapterRead(int idChap) async {
+    try {
+      var request = await Requests.post(
+              "http://192.168.43.187:5000/api/create-read",
+              headers: {"x-access-token": widget.tokenUser},
+              body: {"chapterId": idChap},
+              bodyEncoding: RequestBodyEncoding.JSON)
+          .timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          return null;
+        },
+      );
+      print("-----------");
+      print(idChap);
+      print("-----------");
+      var dataReponse = request.json();
+      print(dataReponse);
+    } on Exception {
+      rethrow;
+    }
+  }
+
   bool _isLoading = true;
   PDFDocument document;
   // void initState() {
@@ -166,17 +195,20 @@ class _ReadScreen extends State<ReadScreen> {
 
   List<dynamic> nameChapters = [];
   List linkPDFs = [];
+  List idChapters = [];
   cutData() {
     print(widget.chapters.length);
     for (int i = 0; i < widget.chapters.length; i++) {
       nameChapters.add(widget.chapters[i]["nameChapter"]);
       linkPDFs.add(widget.chapters[i]["linkPdf"]);
+      idChapters.add(widget.chapters[i]["idChapter"]);
     }
     setState(() {
       dataChapter = nameChapters;
     });
     print(nameChapters);
     print(linkPDFs);
+    print(idChapters);
   }
 
   loadDocument(String linkpdf) async {
@@ -192,7 +224,7 @@ class _ReadScreen extends State<ReadScreen> {
     );
     _pdfDoc = await PDFDoc.fromURL(value);
     String text = await _pdfDoc.text;
-    print(text);
+    // print(text);
     setState(() {
       _newVoiceText = text;
       checkTTS = false;
@@ -269,6 +301,8 @@ class _ReadScreen extends State<ReadScreen> {
                                       dataChapter.indexOf(dropdownValue)]);
                                   changePDF(linkPDFs[
                                       dataChapter.indexOf(dropdownValue)]);
+                                  postChapterRead(idChapters[
+                                      dataChapter.indexOf(dropdownValue)]);
                                 });
                               },
                               items: dataChapter.map((dynamic value) {
@@ -292,13 +326,13 @@ class _ReadScreen extends State<ReadScreen> {
                                   // color: Colors.amber,
                                   color: Colors.green,
                                   splashColor: Colors.greenAccent,
-                                  onPressed: checkTTS ? null:() => _speak()),
+                                  onPressed: checkTTS ? null : () => _speak()),
                               IconButton(
                                   icon: Icon(Icons.stop),
                                   // color: Colors.amber,
                                   color: Colors.red,
                                   splashColor: Colors.redAccent,
-                                  onPressed: checkTTS ? null:() => _stop()),
+                                  onPressed: checkTTS ? null : () => _stop()),
                             ],
                           ),
                         ),

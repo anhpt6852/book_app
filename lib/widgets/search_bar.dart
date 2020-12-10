@@ -54,8 +54,10 @@ class _SearchBarDemoHomeState extends State<SearchBarDemoHome> {
           var chapters = new Map();
           var nameChapter = dataRes["data"][i]["chapters"][k]["name"];
           var linkPdf = dataRes["data"][i]["chapters"][k]["linkPdf"];
+          var idChapter = dataRes["data"][i]["chapters"][k]["id"];
           chapters["nameChapter"] = nameChapter;
           chapters["linkPdf"] = linkPdf;
+          chapters["idChapter"] = idChapter;
           dataChapter.add(chapters);
         }
         List dataComment = [];
@@ -152,6 +154,7 @@ class _SearchBarDemoHomeState extends State<SearchBarDemoHome> {
                                       userID: widget.userID,
                                       idBook: i["idBook"],
                                       comments: i["comments"],
+                                      
                                     );
                             },
                           ),
