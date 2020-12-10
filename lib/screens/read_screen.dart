@@ -5,6 +5,10 @@ import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 // import "package:book_app/screens/drop_down.dart";
 // import 'package:dropdown_formfield/dropdown_formfield.dart';
 // import "package:book_app/screens/drop_form.dart";
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:pdf_text/pdf_text.dart';
 
 class ReadScreen extends StatefulWidget {
   final String linkPdf;
@@ -14,14 +18,151 @@ class ReadScreen extends StatefulWidget {
   _ReadScreen createState() => _ReadScreen();
 }
 
+enum TtsState { playing, stopped, paused, continued }
+
 class _ReadScreen extends State<ReadScreen> {
-  bool _isLoading = true;
-  PDFDocument document;
-  void initState() {
+//--------------------------- text to speech ---------------------------
+  FlutterTts flutterTts;
+  dynamic languages;
+  String language = "vi-VN";
+  double volume = 0.5;
+  double pitch = 1.0;
+  double rate = 1;
+
+  String _newVoiceText = "Sơn";
+
+  TtsState ttsState = TtsState.stopped;
+
+  get isPlaying => ttsState == TtsState.playing;
+
+  get isStopped => ttsState == TtsState.stopped;
+
+  get isPaused => ttsState == TtsState.paused;
+
+  get isContinued => ttsState == TtsState.continued;
+  PDFDoc _pdfDoc;
+  bool checkTTS = true;
+  Future _pickPDFText(String linkPdf) async {
+    _pdfDoc = await PDFDoc.fromURL(linkPdf);
+    String text = await _pdfDoc.text;
+    print(text);
+    setState(() {
+      _newVoiceText = text;
+      checkTTS = false;
+    });
+  }
+
+  @override
+  initState() {
     super.initState();
+    initTts();
     loadDocument(widget.linkPdf);
     cutData();
+    _pickPDFText(widget.linkPdf);
   }
+
+  initTts() {
+    flutterTts = FlutterTts();
+
+    _getLanguages();
+
+    if (!kIsWeb) {
+      if (Platform.isAndroid) {
+        _getEngines();
+      }
+    }
+
+    flutterTts.setStartHandler(() {
+      setState(() {
+        print("Playing");
+        ttsState = TtsState.playing;
+      });
+    });
+
+    flutterTts.setCompletionHandler(() {
+      setState(() {
+        print("Complete");
+        ttsState = TtsState.stopped;
+      });
+    });
+
+    flutterTts.setCancelHandler(() {
+      setState(() {
+        print("Cancel");
+        ttsState = TtsState.stopped;
+      });
+    });
+
+    if (kIsWeb || Platform.isIOS) {
+      flutterTts.setPauseHandler(() {
+        setState(() {
+          print("Paused");
+          ttsState = TtsState.paused;
+        });
+      });
+
+      flutterTts.setContinueHandler(() {
+        setState(() {
+          print("Continued");
+          ttsState = TtsState.continued;
+        });
+      });
+    }
+
+    flutterTts.setErrorHandler((msg) {
+      setState(() {
+        print("error: $msg");
+        ttsState = TtsState.stopped;
+      });
+    });
+  }
+
+  Future _getLanguages() async {
+    languages = await flutterTts.getLanguages;
+    if (languages != null) setState(() => languages);
+  }
+
+  Future _getEngines() async {
+    var engines = await flutterTts.getEngines;
+    if (engines != null) {
+      for (dynamic engine in engines) {
+        print(engine);
+      }
+    }
+  }
+
+  Future _speak() async {
+    await flutterTts.setVolume(volume);
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.setPitch(pitch);
+
+    if (_newVoiceText != null) {
+      if (_newVoiceText.isNotEmpty) {
+        await flutterTts.awaitSpeakCompletion(true);
+        await flutterTts.speak(_newVoiceText);
+      }
+    }
+  }
+
+  Future _stop() async {
+    var result = await flutterTts.stop();
+    if (result == 1) setState(() => ttsState = TtsState.stopped);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    flutterTts.stop();
+  }
+
+//--------------------------- text to speech ---------------------------
+  bool _isLoading = true;
+  PDFDocument document;
+  // void initState() {
+  //   super.initState();
+  //   loadDocument(widget.linkPdf);
+  //   cutData();
+  // }
 
   List<dynamic> nameChapters = [];
   List linkPDFs = [];
@@ -43,13 +184,22 @@ class _ReadScreen extends State<ReadScreen> {
 
     setState(() => _isLoading = false);
   }
+
   changePDF(String value) async {
     setState(() => _isLoading = true);
-      document = await PDFDocument.fromURL(
-        value,
-      );
+    document = await PDFDocument.fromURL(
+      value,
+    );
+    _pdfDoc = await PDFDoc.fromURL(value);
+    String text = await _pdfDoc.text;
+    print(text);
+    setState(() {
+      _newVoiceText = text;
+      checkTTS = false;
+    });
     setState(() => _isLoading = false);
   }
+
   bool checkData = false;
   List<dynamic> dataChapter = [
     'Chương 1:...',
@@ -96,7 +246,7 @@ class _ReadScreen extends State<ReadScreen> {
                         ),
                       ),
                       Expanded(
-                        flex: 5,
+                        flex: 4,
                         child: Column(
                           children: <Widget>[
                             DropdownButton<dynamic>(
@@ -117,7 +267,8 @@ class _ReadScreen extends State<ReadScreen> {
                                   print(dataChapter.indexOf(dropdownValue));
                                   print(linkPDFs[
                                       dataChapter.indexOf(dropdownValue)]);
-                                  changePDF(linkPDFs[dataChapter.indexOf(dropdownValue)]);
+                                  changePDF(linkPDFs[
+                                      dataChapter.indexOf(dropdownValue)]);
                                 });
                               },
                               items: dataChapter.map((dynamic value) {
@@ -131,14 +282,25 @@ class _ReadScreen extends State<ReadScreen> {
                         ),
                       ),
                       Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: <Widget>[
-                            IconButton(
-                                icon: Icon(Icons.volume_up),
-                                color: Colors.amber,
-                                onPressed: null),
-                          ],
+                        flex: 2,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Row(
+                            children: <Widget>[
+                              IconButton(
+                                  icon: Icon(Icons.volume_up),
+                                  // color: Colors.amber,
+                                  color: Colors.green,
+                                  splashColor: Colors.greenAccent,
+                                  onPressed: checkTTS ? null:() => _speak()),
+                              IconButton(
+                                  icon: Icon(Icons.stop),
+                                  // color: Colors.amber,
+                                  color: Colors.red,
+                                  splashColor: Colors.redAccent,
+                                  onPressed: checkTTS ? null:() => _stop()),
+                            ],
+                          ),
                         ),
                       ),
                     ],
