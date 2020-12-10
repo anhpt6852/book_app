@@ -498,39 +498,6 @@ class CommentScreen extends StatefulWidget {
 
 class CommentScreenState extends State<CommentScreen> {
   List listCmt = [];
-  // List<String> _Comments = [
-  //   'Truyen hay qua',
-  // ];
-  // List<String> _name = [
-  //   'anh',
-  // ];
-  // void _addComment(String val) {
-  //   setState(() {
-  //     _Comments.add(val);
-  //   });
-  // }
-
-  // void _addName(String val) {
-  //   setState(() {
-  //     _name.add(val);
-  //   });
-  // }
-
-  // Widget _buildCommentList() {
-  //   return ListView.builder(itemBuilder: (context, index) {
-  //     if (index < _Comments.length) {
-  //       return _buildCommentItem(_Comments[index], _name[index]);
-  //     }
-  //   });
-  // }
-
-  // Widget _buildCommentItem(String comment, String name) {
-  //   return ListTile(
-  //     title: Text(name),
-  //     subtitle: Text(comment),
-  //   );
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -628,7 +595,7 @@ class CommentScreenState extends State<CommentScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 2,
+      height: size.height * 0.6,
       child: Column(
         children: <Widget>[
           TextField(
@@ -660,32 +627,31 @@ class CommentScreenState extends State<CommentScreen> {
             },
           ),
           Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              for (var i in listCmt)
-                Column(children: [
-                  Container(
-                    child: Text(i["userCmt"].substring(0,1),style: TextStyle(fontSize: 30)),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Color.fromRGBO(30, 136, 229, 1),
-                    ),
-                    alignment: Alignment.center,
-                    height: 50,
-                    width: 50,
-                    margin: EdgeInsets.only(left: 0),
-                  ),
-                  ListTile(
-                  title: Text(i["userCmt"]),
-                  subtitle: Text(i["content"]),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    for (var i in listCmt)
+                      ListTile(
+                        leading:Container(
+                        child: Text(i["userCmt"].substring(0,1),style: TextStyle(fontSize: 30,color: Colors.white)),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Color.fromRGBO(30, 136, 229, 1),
+                        ),
+                        alignment: Alignment.center,
+                        height: 50,
+                        width: 50,
+                        margin: EdgeInsets.only(left: 0),
+                      ),
+                        title: Text(i["userCmt"]),
+                        subtitle: Text(i["content"]),
+                      ),
+                    SizedBox(height: 10),
+                  ],
                 ),
-                ],
-                ),
-                
-              SizedBox(height: 10),
-            ],
-          )),
+            )
+          ),
         ],
       ),
     );
