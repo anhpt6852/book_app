@@ -238,7 +238,8 @@ class _HomeScreen extends State<HomeScreen> {
         dataHalfBook1.add(items);
       }
       print("----------------------------------==================");
-      print(dataHalfBook1[0]["linkChapter"]);
+      print(dataHalfBook1[0]["chapters"]);
+      setState(() {});
 // getnamebook ------------------------------------------
     } on Exception {
       rethrow;
@@ -314,6 +315,7 @@ class _HomeScreen extends State<HomeScreen> {
                       return UserProfile(
                         nameProfile: widget.nameProfile,
                         emailUser: widget.emailUser,
+                        tokenUser: widget.tokenUser,
                       );
                     },
                   ),
