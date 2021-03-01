@@ -1,14 +1,13 @@
 import 'package:book_app/consttants.dart';
-import 'package:book_app/screens/details_screen.dart';
-import 'package:book_app/screens/profile.dart';
-import 'package:book_app/screens/read_screen.dart';
-import 'package:book_app/widgets/book_rating.dart';
-import 'package:book_app/widgets/reading_card_list.dart';
-import 'package:book_app/widgets/search_card.dart';
-import 'package:book_app/widgets/two_side_rounded_button.dart';
+import 'package:book_app/screens/Details/details_screen.dart';
+import 'package:book_app/screens/Profile/profile.dart';
+import 'package:book_app/screens/Read/read_screen.dart';
+import 'package:book_app/widgets/card_widgets/book_rating.dart';
+import 'package:book_app/widgets/card_widgets/reading_card_list.dart';
+import 'package:book_app/widgets/card_widgets/two_side_rounded_button.dart';
 import 'package:requests/requests.dart';
 import 'package:flutter/material.dart';
-import 'package:book_app/widgets/search_bar.dart';
+import 'package:book_app/widgets/card_widgets/search_bar.dart';
 // import 'package:requests/requests.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -259,21 +258,6 @@ class _HomeScreen extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          // IconButton(
-          //   icon: const Icon(Icons.search),
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) {
-          //           return SearchBarDemoHome(
-          //             // listBook: dataBook,
-          //           );
-          //         },
-          //       ),
-          //     );
-          //   },
-          // ),
           Expanded(
             flex: 8,
             child: Container(
@@ -532,14 +516,6 @@ class _HomeScreen extends State<HomeScreen> {
                                         ),
                                       ),
                                     ),
-                                  // Container(
-                                  //   height: 7,
-                                  //   width: size.width * .65,
-                                  //   decoration: BoxDecoration(
-                                  //     color: kProgressIndicator,
-                                  //     borderRadius: BorderRadius.circular(7),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),
@@ -552,24 +528,6 @@ class _HomeScreen extends State<HomeScreen> {
                 ],
               ),
             ),
-            // Scaffold(
-            //   bottomNavigationBar: BottomNavigationBar(
-            //               items: const <BottomNavigationBarItem>[
-            //               BottomNavigationBarItem(
-            //                 icon: Icon(Icons.home),
-            //                 title: Text('a'),
-            //               ),
-            //               BottomNavigationBarItem(
-            //                 icon: Icon(Icons.business),
-            //                 title: Text('b')
-            //               ),
-            //               BottomNavigationBarItem(
-            //                 icon: Icon(Icons.school),
-            //                 title: Text('c')
-            //               ),
-            //             ],
-            //           ),
-            // )
           ],
         ),
       ),

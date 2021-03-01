@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:book_app/Screens/Login/login_screen.dart';
 import 'package:book_app/Screens/Signup/components/background.dart';
-import 'package:book_app/components/already_have_an_account_acheck.dart';
-import 'package:book_app/components/rounded_button.dart';
-import 'package:book_app/components/rounded_input_field.dart';
-import 'package:book_app/components/rounded_user_field.dart';
-import 'package:book_app/components/rounded_password_field.dart';
-import 'package:book_app/components/rounded_cfpassword_field.dart';
+import 'package:book_app/widgets/login_widgets/already_have_an_account_acheck.dart';
+import 'package:book_app/widgets/login_widgets/rounded_button.dart';
+import 'package:book_app/widgets/login_widgets/rounded_input_field.dart';
+import 'package:book_app/widgets/login_widgets/rounded_user_field.dart';
+import 'package:book_app/widgets/login_widgets/rounded_password_field.dart';
+import 'package:book_app/widgets/login_widgets/rounded_cfpassword_field.dart';
 import 'package:requests/requests.dart';
 
 class Body extends StatefulWidget {
@@ -45,9 +45,8 @@ class _Body extends State<Body> {
       if (dataReponse["success"] == true) {
         setState(() {
           successUser = true;
-          // tokenLogin = dataReponse["data"];
         });
-      } else {       
+      } else {
         setState(() {
           checkSignUp = false;
         });

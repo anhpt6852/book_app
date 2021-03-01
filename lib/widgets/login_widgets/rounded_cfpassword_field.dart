@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:book_app/components/text_field_container.dart';
+import 'package:book_app/widgets/login_widgets/text_field_container.dart';
 import 'package:book_app/consttants.dart';
 
-class RoundedUserField extends StatelessWidget {
-  final String hintText;
-  final IconData icon;
+class RoundedCfPasswordField extends StatelessWidget {
   final ValueChanged<String> onChanged;
-  const RoundedUserField({
+  const RoundedCfPasswordField({
     Key key,
-    this.hintText,
-    this.icon = Icons.person,
     this.onChanged,
   }) : super(key: key);
 
@@ -17,14 +13,19 @@ class RoundedUserField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        obscureText: true,
         onChanged: onChanged,
         cursorColor: kPrimaryColor,
         decoration: InputDecoration(
+          hintText: "Confirm Password",
           icon: Icon(
-            icon,
+            Icons.lock_outline,
             color: kPrimaryColor,
           ),
-          hintText: hintText,
+          suffixIcon: Icon(
+            Icons.visibility,
+            color: kPrimaryColor,
+          ),
           border: InputBorder.none,
         ),
       ),

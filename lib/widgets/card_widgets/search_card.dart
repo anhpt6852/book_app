@@ -25,7 +25,6 @@ class SearchCard extends StatelessWidget {
           children: <Widget>[
             Positioned(
               top: 0,
-              // bottom: 0,
               left: 0,
               right: 0,
               child: Container(
@@ -35,15 +34,6 @@ class SearchCard extends StatelessWidget {
                     bottom: BorderSide(
                         width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.1)),
                   ),
-                  // color: Colors.red,
-                  // borderRadius: BorderRadius.circular(5),
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     offset: Offset(0, 10),
-                  //     blurRadius: 33,
-                  //     color: kShadowColor,
-                  //   ),
-                  // ],
                 ),
               ),
             ),

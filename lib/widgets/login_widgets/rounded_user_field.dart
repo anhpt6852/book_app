@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:book_app/components/text_field_container.dart';
+import 'package:book_app/widgets/login_widgets/text_field_container.dart';
 import 'package:book_app/consttants.dart';
 
-class RoundedInputField extends StatelessWidget {
+class RoundedUserField extends StatelessWidget {
   final String hintText;
   final IconData icon;
   final ValueChanged<String> onChanged;
-  const RoundedInputField({
+  const RoundedUserField({
     Key key,
     this.hintText,
-    this.icon = Icons.email,
+    this.icon = Icons.person,
     this.onChanged,
   }) : super(key: key);
 

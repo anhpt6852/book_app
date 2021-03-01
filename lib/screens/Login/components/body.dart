@@ -1,12 +1,11 @@
-import 'package:book_app/screens/home_screen.dart';
+import 'package:book_app/screens/Home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:book_app/Screens/Login/components/background.dart';
 import 'package:book_app/Screens/Signup/signup_screen.dart';
-import 'package:book_app/components/already_have_an_account_acheck.dart';
-import 'package:book_app/components/rounded_button.dart';
-import 'package:book_app/components/rounded_user_field.dart';
-import 'package:book_app/components/rounded_password_field.dart';
-// import 'package:flutter_svg/svg.dart';
+import 'package:book_app/widgets/login_widgets/already_have_an_account_acheck.dart';
+import 'package:book_app/widgets/login_widgets/rounded_button.dart';
+import 'package:book_app/widgets/login_widgets/rounded_user_field.dart';
+import 'package:book_app/widgets/login_widgets/rounded_password_field.dart';
 import 'package:requests/requests.dart';
 
 class Body extends StatefulWidget {
@@ -15,9 +14,6 @@ class Body extends StatefulWidget {
 }
 
 class _Body extends State<Body> {
-  // const Body({
-  //   Key key,
-  // }) : super(key: key);
   String username = "";
   String passWord = "";
   bool checkUser = false;
@@ -53,7 +49,6 @@ class _Body extends State<Body> {
       } else {
         setState(() {
           checkLogin = false;
-          // tokenLogin = dataReponse["data"];
         });
       }
     } on Exception {
@@ -76,10 +71,6 @@ class _Body extends State<Body> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: size.height * 0.03),
-            /*SvgPicture.asset(
-              "assets/icons/login.svg",
-              height: size.height * 0.35,
-            ),*/
             SizedBox(height: size.height * 0.03),
             RoundedUserField(
               hintText: "User",

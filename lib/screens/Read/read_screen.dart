@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:requests/requests.dart';
-import 'package:book_app/screens/details_screen.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
-// import "package:book_app/screens/drop_down.dart";
-// import 'package:dropdown_formfield/dropdown_formfield.dart';
-// import "package:book_app/screens/drop_form.dart";
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_tts/flutter_tts.dart';
@@ -187,12 +183,6 @@ class _ReadScreen extends State<ReadScreen> {
 
   bool _isLoading = true;
   PDFDocument document;
-  // void initState() {
-  //   super.initState();
-  //   loadDocument(widget.linkPdf);
-  //   cutData();
-  // }
-
   List<dynamic> nameChapters = [];
   List linkPDFs = [];
   List idChapters = [];
@@ -351,11 +341,6 @@ class _ReadScreen extends State<ReadScreen> {
 
   Container presentChapter(Size size, BuildContext context) {
     return Container(
-      // child: _isLoading
-      //         ? Center(child: CircularProgressIndicator())
-      //         : PDFViewer(
-      //             document: document,)
-      // zoomSteps: 1,
       child: Stack(
         children: <Widget>[
           Container(
@@ -389,63 +374,3 @@ class _ReadScreen extends State<ReadScreen> {
     );
   }
 }
-
-// class DropDownList extends StatefulWidget {
-//   List chapters = [];
-//   DropDownList({
-//     Key key,
-//     this.chapters,
-//   }) : super(key: key);
-
-//   @override
-//   _DropDownListState createState() => _DropDownListState();
-// }
-
-// class _DropDownListState extends State<DropDownList> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     // cutData();
-//     setState(() {
-//       dataChapter = widget.chapters;
-
-//     });
-//   }
-
-//   bool checkData = false;
-//   List<dynamic> dataChapter = [
-//     'Chương 1:...',
-//     'Chương 2:...',
-//     'Chương 3:...',
-//     'Chương 4:...'
-//   ];
-//   dynamic dropdownValue = 'Chương 1:...';
-//   @override
-//   Widget build(BuildContext context) {
-//     return DropdownButton<dynamic>(
-//       isExpanded: true,
-//       value: checkData ? dropdownValue : null,
-//       icon: Icon(Icons.arrow_drop_down),
-//       iconSize: 24,
-//       elevation: 16,
-//       style: TextStyle(color: Colors.deepPurple),
-//       underline: Container(
-//         height: 2,
-//         color: Colors.deepPurpleAccent,
-//       ),
-//       onChanged: (dynamic newValue) {
-//         setState(() {
-//           checkData = true;
-//           dropdownValue = newValue;
-//           print(dataChapter.indexOf(dropdownValue));
-//         });
-//       },
-//       items: dataChapter.map((dynamic value) {
-//         return DropdownMenuItem<dynamic>(
-//           value: value,
-//           child: Text(value),
-//         );
-//       }).toList(),
-//     );
-//   }
-// }

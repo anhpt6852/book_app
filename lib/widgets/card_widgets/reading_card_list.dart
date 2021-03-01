@@ -1,8 +1,7 @@
 import 'package:book_app/consttants.dart';
-import 'package:book_app/widgets/book_rating.dart';
-import 'package:book_app/widgets/two_side_rounded_button.dart';
+import 'package:book_app/widgets/card_widgets/book_rating.dart';
+import 'package:book_app/widgets/card_widgets/two_side_rounded_button.dart';
 import 'package:flutter/material.dart';
-import 'package:requests/requests.dart';
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 
 class ReadingListCard extends StatelessWidget {
@@ -12,7 +11,6 @@ class ReadingListCard extends StatelessWidget {
   final double rating;
   final Function pressDetails;
   final Function pressRead;
-  // PDFDocument document;
   PDFDocument document;
 
   ReadingListCard(
@@ -40,10 +38,6 @@ class ReadingListCard extends StatelessWidget {
             child: Container(
               height: 221,
               decoration: BoxDecoration(
-                /* image: DecorationImage(
-                      image: AssetImage("assets/images/bg6.png"),
-                      fit: BoxFit.fitWidth,
-                    ), */
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(29),
                 boxShadow: [
@@ -66,12 +60,6 @@ class ReadingListCard extends StatelessWidget {
             right: 20,
             child: Column(
               children: <Widget>[
-                // IconButton(
-                //   icon: Icon(
-                //     Icons.favorite_border,
-                //   ),
-                //   onPressed: () {},
-                // ),
                 BookRating(score: rating),
               ],
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:book_app/widgets/info_card.dart';
+import 'package:book_app/widgets/card_widgets/info_card.dart';
 import 'package:requests/requests.dart';
 
 class UserProfile extends StatefulWidget {
@@ -51,11 +51,13 @@ class _UserProfile extends State<UserProfile> {
       rethrow;
     }
   }
-@override
+
+  @override
   void initState() {
     super.initState();
     getHalfReading();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,27 +92,28 @@ class _UserProfile extends State<UserProfile> {
               text: widget.emailUser,
               icon: Icons.email,
             ),
-            for(var i in dataBookreaded)
-            Container(
-              margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 15.0),
-              decoration: BoxDecoration(
+            for (var i in dataBookreaded)
+              Container(
+                margin: const EdgeInsets.only(
+                    left: 20.0, right: 20.0, bottom: 15.0),
+                decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
                         width: 1.0, color: Color.fromRGBO(0, 0, 0, 0.1)),
                   ),
                 ),
-              child: ListTile(
-              leading: Icon(Icons.book),
-              title: Text(i["nameBook"]),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Time: "+i["time"]),
-                  Text("Chương đang đọc: "+i["chapterIndex"]),
-                ],
+                child: ListTile(
+                  leading: Icon(Icons.book),
+                  title: Text(i["nameBook"]),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Time: " + i["time"]),
+                      Text("Chương đang đọc: " + i["chapterIndex"]),
+                    ],
+                  ),
+                ),
               ),
-              ),
-            ),            
           ],
         ),
       ),
